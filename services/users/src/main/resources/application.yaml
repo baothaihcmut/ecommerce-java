@@ -1,0 +1,62 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: users
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://ep-tight-glitter-a17vbx2k-pooler.ap-southeast-1.aws.neon.tech/ecommerce-go-users?sslmode=require}
+    username: ${DB_USER:neondb_owner}
+    password: ${DB_PASSWORD:npg_ARFzU8NZupg7}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update  
+    show-sql: true
+  redis:
+    host: ${REDIST_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: "" 
+    database: 0
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+management:
+
+  endpoint:
+    info:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: health,info,metrics
+
+info:
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      version: "@java.version@"
+
+
+jwt:
+  access_token:
+    secret: your_accesstoken_key111111111111111111111
+    expiry: 3
+  refresh_token:
+    secret: your_accesstoken_key111111111111111111111
+    expiry: 7
