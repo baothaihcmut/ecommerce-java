@@ -29,7 +29,7 @@ public class AuthFilter implements GatewayFilter {
     private final JwtUtil jwtUtil;
     public static final List<String> openApiEndpoints = List.of(
             "/auth/sign-up",
-            "/auth/login");
+            "/auth/log-in");
     private Predicate<ServerHttpRequest> isSecured = request -> openApiEndpoints
             .stream()
             .noneMatch(uri -> request.getURI().getPath().contains(uri));

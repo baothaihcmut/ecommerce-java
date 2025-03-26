@@ -2,6 +2,8 @@ server:
   port: 8762
 
 spring:
+  main: 
+    web-application-type: reactive
   application:
     name: gateway
   cloud:
@@ -9,4 +11,10 @@ spring:
       discovery:
         locator:
           enabled: true
+jwt:
+  secret: "your_accesstoken_key111111111111111111111"
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761
