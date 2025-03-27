@@ -1,14 +1,14 @@
 package com.ecommerceapp.gateway.filters;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -18,45 +18,80 @@ import com.ecommerceapp.gateway.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-@RefreshScope
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+
+
+
+
+@Slf4j
 @Component
-@RequiredArgsConstructor
-public class AuthFilter implements GatewayFilter {
+public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> {
     private final ObjectMapper objectMapper;
     private final JwtUtil jwtUtil;
-    public static final List<String> openApiEndpoints = List.of(
-            "/auth/sign-up",
-            "/auth/log-in");
-    private Predicate<ServerHttpRequest> isSecured = request -> openApiEndpoints
-            .stream()
-            .noneMatch(uri -> request.getURI().getPath().contains(uri));
-
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest req = exchange.getRequest();
-        if (isSecured.test(req)) {
-            if (this.isAuthMissing(req)) {
-                return this.onError(exchange, "missing token", HttpStatus.UNAUTHORIZED);
-            }
-            String token = this.getAuthHeader(req);
-            if (jwtUtil.isInvalid(token)) {
-                return this.onError(exchange, "token is invalid", HttpStatus.UNAUTHORIZED);
-            }
-            this.populateRequestWithHeaders(exchange, token);
-        }
-        return chain.filter(exchange);
+    
+    
+    public AuthFilter(ObjectMapper objectMapper, JwtUtil jwtUtil) {
+        super(Config.class);
+        this.objectMapper = objectMapper;
+        this.jwtUtil = jwtUtil;
     }
-
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+    
+    @Override
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+            if (isSecured(request,config.getOpenApiEndpoints().stream().map(uri->config.getPrefix()+uri).toList())) {
+                if (isAuthMissing(request)) {
+                    return onError(exchange, "Missing token", HttpStatus.UNAUTHORIZED);
+                }
+                
+                String token = getAuthHeader(request);
+                if (jwtUtil.isInvalid(token)) {
+                    return onError(exchange, "Token is invalid", HttpStatus.UNAUTHORIZED);
+                }
+                
+                populateRequestWithHeaders(exchange, token);
+            }
+            return chain.filter(exchange);
+        };
+    }
+    
+    private boolean isSecured(ServerHttpRequest request,List<String> openApis ) {
+        return openApis.stream().noneMatch(uri -> request.getURI().getPath().contains(uri));
+    }
+    
+    private boolean isAuthMissing(ServerHttpRequest request) {
+        return !request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION);
+    }
+    
+    private String getAuthHeader(ServerHttpRequest request) {
+        return request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    }
+    
+    private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
+        Claims claims = jwtUtil.getAllClaimsFromToken(token);
+        exchange.getRequest().mutate()
+                .header("userId", String.valueOf(claims.get("userId")))
+                .header("isShopOwnerActive", String.valueOf(claims.get("userId")))
+                .build();
+    }
+    
+    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus status) {
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        Map<String, Object> errorResponse = Map.of(
-                "success", false,
-                "message", err,
-                "data", null);
+        response.setStatusCode(status);
+        response.getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("success", false);
+        errorResponse.put("message", err);
+        errorResponse.put("data", null);
+        
         try {
             byte[] bytes = objectMapper.writeValueAsBytes(errorResponse);
             DataBuffer buffer = response.bufferFactory().wrap(bytes);
@@ -65,20 +100,12 @@ public class AuthFilter implements GatewayFilter {
             return response.setComplete();
         }
     }
-
-    private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0);
-    }
-
-    private boolean isAuthMissing(ServerHttpRequest request) {
-        return !request.getHeaders().containsKey("Authorization");
-    }
-
-    private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
-        Claims claims = jwtUtil.getAllClaimsFromToken(token);
-        exchange.getRequest().mutate()
-                .header("userId", String.valueOf(claims.get("userId")))
-                .header("isShopOwnerActive", String.valueOf(claims.get("userId")))
-                .build();
+    
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Config {
+        private String prefix;
+        private List<String> openApiEndpoints;
     }
 }

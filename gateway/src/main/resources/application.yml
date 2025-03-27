@@ -1,5 +1,5 @@
 server:
-  port: 8762
+  port: ${SERVER_POT:8672}
 
 spring:
   main: 
@@ -8,13 +8,21 @@ spring:
     name: gateway
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
+      default-filters:
+        - name: AuthFilter
+          args:
+            openApiEndpoints:
+              - "/auth/sign-up"
+              - "/auth/log-in"
+            prefix: ${APP_PREFIX:/api/v1}
+      routes:
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=${APP_PREFIX:/api/v1}/auth/**
+          filters:
+            - StripPrefix=${APP_PREFIX_COUNT:2}
 jwt:
   secret: "your_accesstoken_key111111111111111111111"
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761
+
