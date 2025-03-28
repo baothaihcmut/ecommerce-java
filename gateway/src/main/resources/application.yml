@@ -22,6 +22,12 @@ spring:
             - Path=${APP_PREFIX:/api/v1}/auth/**
           filters:
             - StripPrefix=${APP_PREFIX_COUNT:2}
+        - id: product-service
+          uri: ${PRODUCT_SERVICE_URI:http://localhost:8083}
+          predicates:
+            - Path=${APP_PREFIX:/api/v1}/product/**
+          filters:
+            - StripPrefix=${APP_PREFIX_COUNT:2}
 jwt:
   secret: "your_accesstoken_key111111111111111111111"
 

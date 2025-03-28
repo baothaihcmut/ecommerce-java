@@ -1,8 +1,10 @@
 package com.ecommerceapp.libs.exception;
+
 import java.nio.file.AccessDeniedException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.ecommerceapp.libs.response.AppResponse;
-
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,10 +25,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<AppResponse> handleAppException(AppException exception) {
 
-        return AppResponse.initResponse(exception.getStatus(), false, exception.getMessage(), null);
+        return AppResponse.initResponse(exception.getStatus(), false, exception.getMessage(), exception.getDetails());
     }
-
-   
 
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<AppResponse> handleMethodArgumentNotValidException(AccessDeniedException exception) {
@@ -41,6 +40,12 @@ public class GlobalExceptionHandler {
             HttpRequestMethodNotSupportedException exception) {
 
         return AppResponse.initResponse(HttpStatus.METHOD_NOT_ALLOWED, false, "Method not allow", null);
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    ResponseEntity<AppResponse> handleMessageNotReadableException(
+            HttpRequestMethodNotSupportedException exception) {
+        return AppResponse.initResponse(HttpStatus.BAD_REQUEST, false, "Missing request body", null);
     }
 
     // Method Not Allowed
