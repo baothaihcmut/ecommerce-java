@@ -43,7 +43,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             if (isSecured(request,
-                    config.getOpenApiEndpoints().stream().map(uri -> config.getPrefix() + uri).toList())) {
+                    config.getOpenApiEndpoints())) {
                 if (isAuthMissing(request)) {
                     return onError(exchange, "Missing token", HttpStatus.UNAUTHORIZED);
                 }
@@ -102,7 +102,6 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Config {
-        private String prefix;
         private List<String> openApiEndpoints;
     }
 }

@@ -25,6 +25,7 @@ import com.ecommerceapp.products.core.port.inbound.handlers.ProductHandler;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult.UploadImageInfo;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
+import com.ecommerceapp.products.core.port.inbound.results.VariationResult;
 import com.ecommerceapp.products.core.port.outbound.clients.ShopClient;
 import com.ecommerceapp.products.core.port.outbound.repositories.CategoryRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
@@ -94,7 +95,15 @@ public class ProductUseCase implements ProductHandler {
                                                                 .images(product.getImages())
                                                                 .thumbnail(product.getThumbnail())
                                                                 .categoryIds(product.getCategoryIds())
-                                                                .variations(product.getVariations())
+                                                                .variations(
+                                                                        product.getVariations()
+                                                                                .stream()
+                                                                                .map(
+                                                                                        variation-> VariationResult
+                                                                                                        .builder()
+                                                                                                        .id(variation.getId())
+                                                                                                        .name(variation.getName())
+                                                                                                        .build()).toList())
                                                                 .soldTotal(product.getSoldTotal())
                                                                 .createdAt(product.getCreatedAt())
                                                                 .updatedAt(product.getUpdatedAt())

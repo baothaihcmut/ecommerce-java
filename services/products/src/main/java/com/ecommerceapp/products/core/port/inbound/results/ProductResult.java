@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class ProductResult {
     private String thumbnail;
     private List<ObjectId> categoryIds;
     private String shopId;
-    private List<String> variations;
+    private List<VariationResult> variations;
     private int soldTotal;
     private Instant createdAt;
     private Instant updatedAt;

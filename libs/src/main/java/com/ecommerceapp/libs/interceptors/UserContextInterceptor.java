@@ -20,7 +20,7 @@ public class UserContextInterceptor implements HandlerInterceptor {
             userContext.set(
                     new UserContext(
                             userId,
-                            isShopOwnerActive != null && isShopOwnerActive == "true"));
+                            isShopOwnerActive != null && isShopOwnerActive.equals("true")));
         }
         return true;
     }

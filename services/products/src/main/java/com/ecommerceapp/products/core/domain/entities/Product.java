@@ -9,8 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.ecommerceapp.libs.exception.AppException;
-import com.ecommerceapp.products.core.exception.ErrorCode;
+
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,7 @@ public class Product {
 
     private String shopId;
 
-    private List<String> variations;
+    private List<Variation> variations;
 
     private int soldTotal;
 
@@ -61,25 +60,16 @@ public class Product {
                 .mapToObj(i -> UUID.randomUUID().toString()).toList();
         this.categoryIds = categroyIds;
         this.shopId = shopId;
-        if (!checkDuplicateVariation(variations)) {
-            throw new AppException(ErrorCode.DUPLICATE_PRODUCT_VARIATION);
-        }
-        this.variations = variations;
+        
+        this.variations = variations.stream().map(variation-> new Variation(variation)).toList();
         this.soldTotal = 0;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 
-    private boolean checkDuplicateVariation(List<String> variations) {
-        return variations.stream()
-                .distinct().count() == variations.size();
-    }
-
+    
     public void addVariations(String variation) {
-        this.variations.add(variation);
-        if (!checkDuplicateVariation(variations)) {
-            throw new AppException(ErrorCode.DUPLICATE_PRODUCT_VARIATION);
-        }
+        this.variations.add(new Variation(variation));
     }
 
 }
