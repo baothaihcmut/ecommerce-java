@@ -1,5 +1,7 @@
 package com.ecommerceapp.products.core.domain.entities;
 
+import org.bson.types.ObjectId;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VariationValue {
-    private String name;
+    private ObjectId variationId;
     private String value;
 }

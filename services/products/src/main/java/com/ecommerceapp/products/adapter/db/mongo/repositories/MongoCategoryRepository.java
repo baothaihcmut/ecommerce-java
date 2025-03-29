@@ -15,10 +15,6 @@ public interface MongoCategoryRepository extends MongoRepository<Category, Objec
     @Query("{'_id': ?0}")
     Optional<Category> findCategoryById(ObjectId id);
 
-    @Query("""
-            {
-                'id': { $in: ?0}
-            }
-            """)
+    @Query("{'id': { $in: ?0}}")
     List<Category> findCategoryByIdList(List<ObjectId> ids);
 }

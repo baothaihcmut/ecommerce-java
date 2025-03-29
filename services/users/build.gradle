@@ -16,3 +16,12 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
 }
+
+jar {
+    archivesBaseName = 'users-service'
+    version = '1.0.0'
+}
+
+tasks.named('bootJar') {
+    mainClass = 'com.example.users.UsersApplication'
+}

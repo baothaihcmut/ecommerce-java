@@ -47,6 +47,7 @@ public class ProductItem {
         this.price = price < 0 ? 0 : price;
         this.images = IntStream.range(0, numOfImage)
                 .mapToObj(i -> UUID.randomUUID().toString()).toList();
+        this.variationValues = values;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }

@@ -32,6 +32,16 @@ public class ProductResponseDTO {
 
     private String shopId;
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class VariationReponseDTO {
+        @JsonSerialize(using = ObjectIdSerializer.class)
+        private ObjectId id;
+
+        private String name;
+    }
+
     private List<VariationReponseDTO> variations;
 
     private int soldTotal;

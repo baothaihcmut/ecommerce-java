@@ -23,9 +23,8 @@ import com.ecommerceapp.products.core.exception.ErrorCode;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductCommand;
 import com.ecommerceapp.products.core.port.inbound.handlers.ProductHandler;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult;
-import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult.UploadImageInfo;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
-import com.ecommerceapp.products.core.port.inbound.results.VariationResult;
+import com.ecommerceapp.products.core.port.inbound.results.UploadImageResult;
 import com.ecommerceapp.products.core.port.outbound.clients.ShopClient;
 import com.ecommerceapp.products.core.port.outbound.repositories.CategoryRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
@@ -86,37 +85,16 @@ public class ProductUseCase implements ProductHandler {
                                 .map(key -> this.s3Service.generatePresignUrlForPut(key, 30, MediaType.IMAGE_PNG))
                                 .toList();
                 return CreateProductResult.builder()
-                                .product(
-                                                ProductResult.builder()
-                                                                .id(product.getId())
-                                                                .name(product.getName())
-                                                                .description(product.getDescription())
-                                                                .shopId(product.getShopId())
-                                                                .images(product.getImages())
-                                                                .thumbnail(product.getThumbnail())
-                                                                .categoryIds(product.getCategoryIds())
-                                                                .variations(
-                                                                        product.getVariations()
-                                                                                .stream()
-                                                                                .map(
-                                                                                        variation-> VariationResult
-                                                                                                        .builder()
-                                                                                                        .id(variation.getId())
-                                                                                                        .name(variation.getName())
-                                                                                                        .build()).toList())
-                                                                .soldTotal(product.getSoldTotal())
-                                                                .createdAt(product.getCreatedAt())
-                                                                .updatedAt(product.getUpdatedAt())
-                                                                .build())
+                                .product(ProductResult.toProductResult(product))
                                 .uploadImageInfo(imageUrls.stream()
-                                                .map(url -> UploadImageInfo.builder()
+                                                .map(url -> UploadImageResult.builder()
                                                                 .url(url)
                                                                 .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
                                                                 .method("PUT")
                                                                 .contentType(MediaType.IMAGE_JPEG.toString())
                                                                 .build())
                                                 .toList())
-                                .uploadThumbnailInfo(UploadImageInfo.builder()
+                                .uploadThumbnailInfo(UploadImageResult.builder()
                                                 .url(thumbnailUrl)
                                                 .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
                                                 .contentType(MediaType.IMAGE_PNG.toString())

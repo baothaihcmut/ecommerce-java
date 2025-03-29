@@ -1,10 +1,10 @@
 package com.ecommerceapp.products.adapter.transport.rest.dtos.response;
 
-import java.time.Instant;
 import java.util.List;
 
+import com.ecommerceapp.products.core.port.inbound.results.UploadImageResult;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,18 +14,7 @@ import lombok.NoArgsConstructor;
 public class CreateProductResponseDTO {
     private ProductResponseDTO product;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class UploadImageInfo {
-        private String url;
-        private Instant expireAt;
-        private String method;
-        private String contentType;
-    }
+    private UploadImageResult uploadThumbnailInfo;
 
-    private UploadImageInfo uploadThumbnailInfo;
-
-    private List<UploadImageInfo> uploadImageInfo;
+    private List<UploadImageResult> uploadImageInfo;
 }

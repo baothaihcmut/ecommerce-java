@@ -17,3 +17,11 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+jar {
+    archivesBaseName = 'api-gateway'
+    version = '1.0.0'
+}
+
+tasks.named('bootJar') {
+    mainClass = 'com.ecommerceapp.gateway.GatewayApplication'
+}
