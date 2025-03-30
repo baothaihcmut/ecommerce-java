@@ -12,17 +12,17 @@ import com.ecommerceapp.products.config.ServiceAddressProperties;
 
 @SpringBootApplication
 @ComponentScans(value = {
-        @ComponentScan("com.ecommerceapp.products"),
-        @ComponentScan("com.ecommerceapp.libs.exception"),
-        @ComponentScan("com.ecommerceapp.libs.interceptors"),
-        @ComponentScan("com.ecommerceapp.libs.s3"),
-        @ComponentScan("com.ecommerceapp.libs.rest"),
-        @ComponentScan(value = "com.ecommerceapp.libs.kafka", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = KafkaConsumerConfig.class)),
+                @ComponentScan("com.ecommerceapp.products"),
+                @ComponentScan("com.ecommerceapp.libs.exception"),
+                @ComponentScan("com.ecommerceapp.libs.interceptors"),
+                @ComponentScan("com.ecommerceapp.libs.s3"),
+                @ComponentScan("com.ecommerceapp.libs.rest"),
+                @ComponentScan(value = "com.ecommerceapp.libs.kafka", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = KafkaConsumerConfig.class)),
 })
 @EnableConfigurationProperties(ServiceAddressProperties.class)
 public class ProductsApplication {
-    public static void main(String[] args) {
+        public static void main(String[] args) {
 
-        SpringApplication.run(ProductsApplication.class, args);
-    }
+                SpringApplication.run(ProductsApplication.class, args);
+        }
 }
