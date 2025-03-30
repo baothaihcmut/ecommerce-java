@@ -7,3 +7,11 @@ dependencies {
 
     implementation project(":libs")
 }
+jar {
+    archivesBaseName = 'mail-service'
+    version = '1.0.0'
+}
+
+tasks.named('bootJar') {
+    mainClass = 'com.ecommerceapp.mail.UsersApplication'
+}

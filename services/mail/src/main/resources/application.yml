@@ -16,7 +16,8 @@ spring:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     consumer:
       consumer-group-id: "email-service"
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+      

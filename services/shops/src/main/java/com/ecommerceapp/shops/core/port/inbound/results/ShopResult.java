@@ -1,0 +1,51 @@
+package com.ecommerceapp.shops.core.port.inbound.results;
+
+import java.time.Instant;
+
+import org.bson.types.ObjectId;
+
+import com.ecommerceapp.shops.core.domain.entities.Shop;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ShopResult {
+    private ObjectId id;
+
+    private String ownerId;
+
+    private String name;
+
+    private String description;
+
+    private Integer numOfProducts;
+
+    private Integer numOfFollower;
+
+    private Float ratingAvg;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
+
+    public static ShopResult toShopResult(Shop shop) {
+        return ShopResult.builder()
+                .id(shop.getId())
+                .name(shop.getName())
+                .description(shop.getDescription())
+                .ownerId(shop.getOwnerId())
+                .numOfFollower(shop.getNumOfFollower())
+                .numOfProducts(shop.getNumOfProducts())
+                .ratingAvg(shop.getRatingAvg())
+                .createdAt(shop.getCreatedAt())
+                .updatedAt(shop.getUpdatedAt())
+                .build();
+    }
+
+}

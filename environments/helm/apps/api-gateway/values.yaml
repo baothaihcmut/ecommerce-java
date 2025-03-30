@@ -1,0 +1,64 @@
+image:
+  repository: baothaihcmut/ecommerce-app-api-gateway
+  tag: v1
+  pullPolicy: Always
+configMap:
+  name: server
+  data:
+    SERVER_PORT: "8080"
+
+config:
+  from: "env"
+  envConfigMap:
+    - "server"
+service:
+  name: "api-gateway"
+  type: LoadBalancer
+  ports:
+    - name: "http"
+      protocol: "TCP"
+      port: 80
+      targetPort: 8080
+resources:
+  requests:
+    cpu: "0.25"
+    memory: "128Mi"
+  limits:
+    cpu: "0.5"
+    memory: "256Mi"
+serviceAccount:
+  enabled: true
+  name: wait-dependency
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list", "watch"]
+
+initContainers: []
+
+ingress:
+  name: api-gateway
+  className: "gce"
+  annotations:
+    networking.gke.io/managed-certificates: ecommerce-cert
+  rules:
+    - host: ecommerce-app.spsohcmut.xyz
+      path: /api
+      service: api-gateway
+      port: 80
+      tls: true
+      tlsSecret: ecommerce-cert
+
+gkeCerts:
+  enabled: true
+  name: ecommerce-cert
+  domains:
+    - "ecommerce-app.spsohcmut.xyz"
+    
+
+
+
+
+
+
+

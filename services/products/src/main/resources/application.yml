@@ -1,0 +1,26 @@
+server:
+  port: ${SERVER_PORT:8083}
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: ${MONGO_URI:localhost:27017}
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
+  #   producer:
+  #     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
+
+
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: us-east-1
+    bucket: ecommerce-app-product-bucket 
+
+services:
+  address:
+    shop-service: "localhost:8084"

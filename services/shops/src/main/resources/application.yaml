@@ -1,0 +1,19 @@
+server:
+  port: ${SERVER_PORT:8084}
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: mongodb+srv://thaibao22042k4:22042004bao@ecommerce-go.xbph8.mongodb.net/productdb?retryWrites=true&w=majority&appName=ecommerce-go
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
+    consumer:
+      consumer-group-id: "shops-service"
+      # key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      # value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      # properties:
+      #   spring.json.trusted.packages: "*"
+    # producer:
+    #   key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #   value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  

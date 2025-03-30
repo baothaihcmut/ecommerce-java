@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_POT:8672}
+  port: ${SERVER_PORT:8080}
 
 spring:
   main: 
@@ -9,6 +9,7 @@ spring:
   cloud:
     gateway:
       default-filters:
+        - StripPrefix=${APP_PREFIX_COUNT:2}
         - name: AuthFilter
           args:
             openApiEndpoints:
@@ -21,7 +22,14 @@ spring:
           predicates:
             - Path=${APP_PREFIX:/api/v1}/auth/**
           filters:
-            - StripPrefix=${APP_PREFIX_COUNT:2}
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+        - id: product-service
+          uri: ${PRODUCT_SERVICE_URI:http://localhost:8083}
+          predicates:
+            - Path=${APP_PREFIX:/api/v1}/product/**
 jwt:
   secret: "your_accesstoken_key111111111111111111111"
 
