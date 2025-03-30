@@ -2,8 +2,6 @@ package com.ecommerceapp.shops.core.port.inbound.results;
 
 import java.time.Instant;
 
-import org.bson.types.ObjectId;
-
 import com.ecommerceapp.shops.core.domain.entities.Shop;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ShopResult {
-    private ObjectId id;
+    private String id;
 
     private String ownerId;
 
@@ -26,7 +24,7 @@ public class ShopResult {
 
     private Integer numOfProducts;
 
-    private Integer numOfFollower;
+    private Integer numOfFollowers;
 
     private Float ratingAvg;
 
@@ -36,11 +34,11 @@ public class ShopResult {
 
     public static ShopResult toShopResult(Shop shop) {
         return ShopResult.builder()
-                .id(shop.getId())
+                .id(shop.getId().toHexString())
                 .name(shop.getName())
                 .description(shop.getDescription())
                 .ownerId(shop.getOwnerId())
-                .numOfFollower(shop.getNumOfFollower())
+                .numOfFollowers(shop.getNumOfFollower())
                 .numOfProducts(shop.getNumOfProducts())
                 .ratingAvg(shop.getRatingAvg())
                 .createdAt(shop.getCreatedAt())

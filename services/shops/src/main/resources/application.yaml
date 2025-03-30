@@ -1,5 +1,11 @@
 server:
   port: ${SERVER_PORT:8084}
+grpc:
+  server:
+    port: ${GRPC_PORT:9094}  
+    reflection-service-enabled: true  
+    security:
+      enabled: false
 spring:
   config:
     import: optional:file:.env[.properties]

@@ -1,5 +1,12 @@
 server:
   port: ${SERVER_PORT:8083}
+grpc:
+  client:
+    shops-service:
+      address: "static://localhost:9094"
+      negotiationType: plaintext
+
+
 spring:
   config:
     import: optional:file:.env[.properties]

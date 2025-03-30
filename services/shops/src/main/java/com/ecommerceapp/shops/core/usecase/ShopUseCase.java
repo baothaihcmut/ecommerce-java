@@ -1,5 +1,6 @@
 package com.ecommerceapp.shops.core.usecase;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +46,7 @@ public class ShopUseCase implements ShopHandler {
 
     @Override
     public GetShopByIdResult getShopById(GetShopByIdQuery query) {
-        Shop shop = shopRepository.findShopById(query.getShopId())
+        Shop shop = shopRepository.findShopById(new ObjectId(query.getShopId()))
                 .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
         return GetShopByIdResult.builder()
                 .shop(ShopResult.toShopResult(shop))

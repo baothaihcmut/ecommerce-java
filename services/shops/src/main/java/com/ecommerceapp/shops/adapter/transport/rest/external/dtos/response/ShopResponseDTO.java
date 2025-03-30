@@ -2,8 +2,6 @@ package com.ecommerceapp.shops.adapter.transport.rest.external.dtos.response;
 
 import java.time.Instant;
 
-import org.bson.types.ObjectId;
-
 import com.ecommerceapp.libs.serializer.ObjectIdSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -17,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ShopResponseDTO {
 
     @JsonSerialize(using = ObjectIdSerializer.class)
-    private ObjectId id;
+    private String id;
 
     private String ownerId;
 
@@ -27,7 +25,7 @@ public class ShopResponseDTO {
 
     private Integer numOfProducts;
 
-    private Integer numOfFollower;
+    private Integer numOfFollowers;
 
     private Float ratingAvg;
 
