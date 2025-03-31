@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '3.4.4' apply false
     id 'io.spring.dependency-management' version '1.0.13.RELEASE' apply false
+    id 'com.google.protobuf' version '0.9.4'
 }
 allprojects {
 	group 'com.ecommerceapp'
