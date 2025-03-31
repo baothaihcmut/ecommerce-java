@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerceapp.libs.events.users.UserRegisterEvent;
 import com.ecommerceapp.libs.exception.AppException;
-import com.ecommerceapp.libs.models.UserContext;
 import com.ecommerceapp.users.core.domain.entities.User;
 import com.ecommerceapp.users.core.events.AuthEventPublisher;
 import com.ecommerceapp.users.core.exception.ErrorCode;
@@ -17,6 +16,7 @@ import com.ecommerceapp.users.core.port.inbound.results.LogInResult;
 import com.ecommerceapp.users.core.port.inbound.results.SignUpResult;
 import com.ecommerceapp.users.core.port.outbound.repositories.UserRepository;
 import com.ecommerceapp.users.core.services.AuthUtilService;
+import com.ecommerceapp.users.core.services.AuthUtilService.AccessTokenPayload;
 import com.ecommerceapp.users.core.services.UserConfirmService;
 
 import jakarta.transaction.Transactional;
@@ -41,10 +41,7 @@ public class AuthUseCase implements AuthHandler {
         }
         // gen token
         String accessToken = this.authUtilService.genAccessToken(
-                UserContext.builder()
-                        .userId(user.getId().toString())
-                        .isShopOwnerActive(user.isShopOwnerActive())
-                        .build());
+                new AccessTokenPayload(user.getId().toString(), user.isShopOwnerActive()));
         String refreshToken = this.authUtilService.genRefreshToken(user.getId());
         return LogInResult.builder()
                 .accessToken(accessToken)

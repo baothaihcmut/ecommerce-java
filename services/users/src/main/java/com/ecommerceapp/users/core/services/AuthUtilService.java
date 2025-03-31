@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import com.ecommerceapp.libs.models.UserContext;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,11 +32,14 @@ public class AuthUtilService {
         this.refreshTokenKey = Keys.hmacShaKeyFor(this.jwtProperties.getRefreshToken().getSecret().getBytes());
     }
 
-    public String genAccessToken(UserContext userContext) throws Exception {
+    public record AccessTokenPayload(String userId, Boolean isShopOwnerActive) {
+    }
+
+    public String genAccessToken(AccessTokenPayload accessTokenPayload) throws Exception {
         return Jwts.builder()
-                .setClaims(this.objectMapper.convertValue(userContext, new TypeReference<Map<String, Object>>() {
+                .setClaims(this.objectMapper.convertValue(accessTokenPayload, new TypeReference<Map<String, Object>>() {
                 }))
-                .setSubject(userContext.getUserId())
+                .setSubject(accessTokenPayload.userId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccessToken().getExpiry()))
                 .signWith(this.accessTokenKey, SignatureAlgorithm.HS256)

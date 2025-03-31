@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.events.products.ProductAdditionEvent;
 import com.ecommerceapp.libs.exception.AppException;
-import com.ecommerceapp.libs.interceptors.UserContextInterceptor;
-import com.ecommerceapp.libs.models.UserContext;
 import com.ecommerceapp.libs.s3.S3Service;
+import com.ecommerceapp.libs.security.SecurityUtil;
+import com.ecommerceapp.libs.security.UserContext;
 import com.ecommerceapp.products.core.domain.entities.Category;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.domain.entities.Shop;
@@ -45,7 +45,7 @@ public class ProductUseCase implements ProductHandler {
         @Override
         @Transactional
         public CreateProductResult createProduct(CreateProductCommand command) {
-                UserContext userContext = UserContextInterceptor.getUserContext();
+                UserContext userContext = SecurityUtil.getUserContext();
                 if (!userContext.getIsShopOwnerActive()) {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
                 }
