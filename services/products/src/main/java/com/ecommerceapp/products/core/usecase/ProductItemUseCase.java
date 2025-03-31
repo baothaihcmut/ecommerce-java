@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.libs.s3.S3Service;
 import com.ecommerceapp.libs.security.SecurityUtil;
-import com.ecommerceapp.libs.security.UserContext;
+import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.domain.entities.ProductItem;
 import com.ecommerceapp.products.core.domain.entities.Shop;
@@ -40,7 +40,7 @@ public class ProductItemUseCase implements ProductItemHandler {
         @Transactional
         public CreateProductItemResult createProductItem(CreateProductItemCommand command) {
                 UserContext userContext = SecurityUtil.getUserContext();
-                if (!userContext.getIsShopOwnerActive()) {
+                if (!userContext.isShopOwnerActive()) {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
                 }
                 // check product exist
@@ -50,7 +50,7 @@ public class ProductItemUseCase implements ProductItemHandler {
                 Shop shop = this.shopClient.findShopById(product.getShopId())
                                 .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
 
-                if (!shop.getShopOwnerId().equals(userContext.getUserId())) {
+                if (!shop.getShopOwnerId().equals(userContext.userId())) {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER);
                 }
                 // check variation

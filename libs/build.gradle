@@ -13,10 +13,9 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.20.135'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'io.github.lognet:grpc-spring-boot-starter:5.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    implementation 'io.github.lognet:grpc-spring-boot-starter:5.0.0'
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
 
     // gRPC dependencies
     implementation 'io.grpc:grpc-protobuf:1.56.0'

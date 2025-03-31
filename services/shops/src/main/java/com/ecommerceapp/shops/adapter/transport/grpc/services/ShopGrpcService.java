@@ -1,7 +1,5 @@
 package com.ecommerceapp.shops.adapter.transport.grpc.services;
 
-import org.lognet.springboot.grpc.GRpcService;
-
 import com.ecommerceapp.generated.shops.GetShopByIdRequest;
 import com.ecommerceapp.generated.shops.GetShopByIdResponse;
 import com.ecommerceapp.generated.shops.ShopServiceGrpc.ShopServiceImplBase;
@@ -11,8 +9,9 @@ import com.ecommerceapp.shops.core.port.inbound.results.GetShopByIdResult;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 
-@GRpcService
+@GrpcService
 @RequiredArgsConstructor
 public class ShopGrpcService extends ShopServiceImplBase {
 

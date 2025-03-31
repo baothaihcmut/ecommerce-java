@@ -22,7 +22,7 @@ public class ExtractUserInfoFilter extends GenericFilterBean {
         String userId = httpRequest.getHeader("X-User-ID");
         String isShopOwnerActive = httpRequest.getHeader("X-Is-Shop-Owner-Active");
         if (userId != null && isShopOwnerActive != null) {
-            UserContext userContext = new UserContext(userId, isShopOwnerActive.equals("true"));
+            CustomUserDetails userContext = new CustomUserDetails(userId, isShopOwnerActive.equals("true"));
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userContext,
                     null,
                     new ArrayList<>());

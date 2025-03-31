@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.libs.security.SecurityUtil;
-import com.ecommerceapp.libs.security.UserContext;
+import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.shops.core.domain.entities.Shop;
 import com.ecommerceapp.shops.core.exception.ErrorCode;
 import com.ecommerceapp.shops.core.port.inbound.commands.CreateShopCommand;
@@ -29,13 +29,13 @@ public class ShopUseCase implements ShopHandler {
     public CreateShopResult createShop(CreateShopCommand command) {
         UserContext userContext = SecurityUtil.getUserContext();
 
-        if (!userContext.getIsShopOwnerActive()) {
+        if (!userContext.isShopOwnerActive()) {
             throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
         }
 
         // create shop
         Shop shop = new Shop(
-                userContext.getUserId(),
+                userContext.userId(),
                 command.getName(),
                 command.getDescription());
         shopRepository.save(shop);

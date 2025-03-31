@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserContext implements UserDetails {
+public class CustomUserDetails implements UserDetails {
     private String userId;
     private Boolean isShopOwnerActive;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserContext(String userId, Boolean isShopOwnerActive) {
+    public CustomUserDetails(String userId, Boolean isShopOwnerActive) {
         this.userId = userId;
         this.isShopOwnerActive = isShopOwnerActive;
     }

@@ -16,7 +16,7 @@ import com.ecommerceapp.libs.events.products.ProductAdditionEvent;
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.libs.s3.S3Service;
 import com.ecommerceapp.libs.security.SecurityUtil;
-import com.ecommerceapp.libs.security.UserContext;
+import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.products.core.domain.entities.Category;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.domain.entities.Shop;
@@ -46,12 +46,12 @@ public class ProductUseCase implements ProductHandler {
         @Transactional
         public CreateProductResult createProduct(CreateProductCommand command) {
                 UserContext userContext = SecurityUtil.getUserContext();
-                if (!userContext.getIsShopOwnerActive()) {
+                if (!userContext.isShopOwnerActive()) {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
                 }
                 Shop shop = this.shopService.findShopById(command.getShopId())
                                 .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
-                if (!userContext.getUserId().equals(shop.getShopOwnerId())) {
+                if (!userContext.userId().equals(shop.getShopOwnerId())) {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER);
                 }
                 // find all category

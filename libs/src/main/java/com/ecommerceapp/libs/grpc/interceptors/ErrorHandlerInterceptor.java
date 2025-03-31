@@ -1,6 +1,5 @@
 package com.ecommerceapp.libs.grpc.interceptors;
 
-import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +12,10 @@ import io.grpc.ServerCall.Listener;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import io.grpc.Status;
+import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 
 @Component
-@GRpcGlobalInterceptor
+@GrpcGlobalServerInterceptor
 public class ErrorHandlerInterceptor implements ServerInterceptor {
 
     @Override
