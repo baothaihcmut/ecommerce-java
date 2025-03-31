@@ -4,11 +4,13 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 public class AppException extends RuntimeException {
     private String message;
     private HttpStatus status;
@@ -20,4 +22,5 @@ public class AppException extends RuntimeException {
         this.status = errorCode.getStatus();
         this.details = errorCode.getDetails();
     }
+
 }

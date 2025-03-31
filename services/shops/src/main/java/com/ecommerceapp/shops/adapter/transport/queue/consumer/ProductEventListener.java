@@ -4,7 +4,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.ecommerceapp.libs.events.products.ProductAdditionEvent;
-import com.ecommerceapp.shops.core.port.inbound.handlers.ShopEventHandler;
+import com.ecommerceapp.shops.core.port.inbound.events.ShopEventHandler;
 
 import lombok.RequiredArgsConstructor;
 

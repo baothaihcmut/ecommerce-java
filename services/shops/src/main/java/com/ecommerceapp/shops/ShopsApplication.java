@@ -12,7 +12,10 @@ import org.springframework.context.annotation.ComponentScans;
         @ComponentScan("com.ecommerceapp.libs.security"),
         @ComponentScan("com.ecommerceapp.libs.rest"),
         @ComponentScan("com.ecommerceapp.libs.kafka"),
-        @ComponentScan("com.ecommerceapp.libs.grpc")
+        @ComponentScan("com.ecommerceapp.libs.grpc"),
+        @ComponentScan("com.ecommerceapp.libs.mappers"),
+        @ComponentScan("com.ecommerceapp.libs.s3")
+
 })
 public class ShopsApplication {
     public static void main(String[] args) {

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package products;
+
+import "google/protobuf/timestamp.proto";
+import "services/products/products/request/create_product.request.proto";
+import "services/products/products/response/create_product.response.proto";
+
+
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.products";
+
+service ProductService {
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+}

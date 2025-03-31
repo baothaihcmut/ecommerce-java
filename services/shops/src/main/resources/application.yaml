@@ -16,10 +16,9 @@ spring:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     consumer:
       consumer-group-id: "shops-service"
-      # key-serializer: org.apache.kafka.common.serialization.StringDeserializer
-      # value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      # properties:
-      #   spring.json.trusted.packages: "*"
-    # producer:
-    #   key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    #   value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: us-east-1
+    bucket: ecommerce-app-product-bucket

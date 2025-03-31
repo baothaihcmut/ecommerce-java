@@ -1,4 +1,4 @@
-package com.ecommerceapp.products.core.port.inbound.commands;
+package com.ecommerceapp.shops.core.port.inbound.commands;
 
 import java.util.List;
 
