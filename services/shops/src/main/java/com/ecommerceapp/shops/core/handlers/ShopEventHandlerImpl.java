@@ -8,7 +8,7 @@ import com.ecommerceapp.libs.events.products.ProductAdditionEvent;
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.shops.core.domain.entities.Shop;
 import com.ecommerceapp.shops.core.exception.ErrorCode;
-import com.ecommerceapp.shops.core.port.inbound.handlers.ShopEventHandler;
+import com.ecommerceapp.shops.core.port.inbound.events.ShopEventHandler;
 import com.ecommerceapp.shops.core.port.outbound.repositories.ShopRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,10 @@ public class ShopEventHandlerImpl implements ShopEventHandler {
     @Transactional
     public void handleAddProduct(ProductAdditionEvent event) {
         Shop shop = this.shopRepository.findShopById(
-                new ObjectId(event.getName())).orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
+                new ObjectId(event.getShopId())).orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
         shop.addProducts(1);
         shopRepository.save(shop);
+
     }
 
 }

@@ -14,7 +14,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode implements BaseErrorCode {
     USER_NOT_SHOP_OWNER_ACTIVE(HttpStatus.FORBIDDEN, "user haven't active shop owner", new HashMap<>()),
-    SHOP_NOT_EXIST(HttpStatus.NOT_FOUND, "shop not exist", new HashMap<>());
+    SHOP_NOT_EXIST(HttpStatus.NOT_FOUND, "shop not exist", new HashMap<>()),
+    SHOP_NOT_BELONG_TO_USER(HttpStatus.FORBIDDEN, "shop not belong to user", new HashMap<>()),
+    USER_NOT_FOLLOW_SHOP(HttpStatus.CONFLICT, "user is not follower of shop", new HashMap<>());
 
     private HttpStatus status;
     private String message;

@@ -1,4 +1,4 @@
-package com.ecommerceapp.shops.core.port.inbound.handlers;
+package com.ecommerceapp.shops.core.port.inbound.events;
 
 import com.ecommerceapp.libs.events.products.ProductAdditionEvent;
 

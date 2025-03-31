@@ -1,4 +1,4 @@
-package com.ecommerceapp.shops.adapter.transport.rest.external.dtos.request;
+package com.ecommerceapp.shops.adapter.transport.rest.dtos.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.ecommerceapp.shops.adapter.transport.rest.external.dtos.response;
+package com.ecommerceapp.shops.adapter.transport.rest.dtos.response;
 
 import java.time.Instant;
 

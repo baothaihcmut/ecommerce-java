@@ -55,4 +55,12 @@ public class Shop {
         this.numOfProducts = Math.max(0, this.numOfProducts - numOfProduct);
     }
 
+    public void addFollower() {
+        this.numOfFollower++;
+    }
+
+    public void deleteFollower() {
+        this.numOfFollower = Math.max(0, this.numOfFollower - 1);
+    }
+
 }

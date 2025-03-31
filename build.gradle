@@ -23,6 +23,10 @@ allprojects {
 		mavenCentral()
 		jcenter()
 	}
+    tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += "-Amapstruct.verbose=true"
+}
+
 }
 
 // Common configurations for all subprojects
