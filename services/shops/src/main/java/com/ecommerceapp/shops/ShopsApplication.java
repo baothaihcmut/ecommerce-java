@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScans;
 @ComponentScans(value = {
         @ComponentScan("com.ecommerceapp.shops"),
         @ComponentScan("com.ecommerceapp.libs.exception"),
-        @ComponentScan("com.ecommerceapp.libs.interceptors"),
+        @ComponentScan("com.ecommerceapp.libs.security"),
         @ComponentScan("com.ecommerceapp.libs.rest"),
         @ComponentScan("com.ecommerceapp.libs.kafka"),
         @ComponentScan("com.ecommerceapp.libs.grpc")
