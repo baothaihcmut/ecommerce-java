@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerceapp.libs.response.AppResponse;
 import com.ecommerceapp.shops.adapter.transport.rest.dtos.request.CreateProductRequestDTO;
 import com.ecommerceapp.shops.adapter.transport.rest.mappers.ShopProductMapper;
-import com.ecommerceapp.shops.core.port.inbound.handlers.ShopHandler;
+import com.ecommerceapp.shops.core.port.inbound.handlers.ShopProductHandler;
 import com.ecommerceapp.shops.core.port.inbound.results.CreateProductResult;
 
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/shops/{id}/products")
 @RequiredArgsConstructor
 public class ShopProductController {
-    private final ShopHandler shopHandler;
+    private final ShopProductHandler shopHandler;
     private final ShopProductMapper shopProductMapper;
 
     @PostMapping("/add")

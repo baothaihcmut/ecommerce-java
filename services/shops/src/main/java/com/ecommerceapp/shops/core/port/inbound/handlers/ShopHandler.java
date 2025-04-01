@@ -1,12 +1,10 @@
 package com.ecommerceapp.shops.core.port.inbound.handlers;
 
-import com.ecommerceapp.shops.core.port.inbound.commands.CreateProductCommand;
 import com.ecommerceapp.shops.core.port.inbound.commands.CreateShopCommand;
 import com.ecommerceapp.shops.core.port.inbound.commands.FollowShopCommand;
 import com.ecommerceapp.shops.core.port.inbound.commands.UnFollowShopCommand;
 import com.ecommerceapp.shops.core.port.inbound.commands.UpdateShopCommand;
 import com.ecommerceapp.shops.core.port.inbound.queries.GetShopByIdQuery;
-import com.ecommerceapp.shops.core.port.inbound.results.CreateProductResult;
 import com.ecommerceapp.shops.core.port.inbound.results.CreateShopResult;
 import com.ecommerceapp.shops.core.port.inbound.results.FollowShopResult;
 import com.ecommerceapp.shops.core.port.inbound.results.GetShopByIdResult;
@@ -22,8 +20,6 @@ public interface ShopHandler {
     FollowShopResult followShop(FollowShopCommand followShopCommand);
 
     UnFollowShopResult unFollowShop(UnFollowShopCommand unFollowShopCommand);
-
-    CreateProductResult createProduct(CreateProductCommand command);
 
     // query
     GetShopByIdResult getShopById(GetShopByIdQuery query);
