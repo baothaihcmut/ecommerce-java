@@ -4,7 +4,10 @@ package products;
 
 import "google/protobuf/timestamp.proto";
 import "services/products/products/request/create_product.request.proto";
+import "services/products/products/request/get_products_of_shop.request.proto";
+
 import "services/products/products/response/create_product.response.proto";
+import "services/products/products/response/get_products_of_shop.response.proto";
 
 
 
@@ -13,4 +16,5 @@ option java_package = "com.ecommerceapp.generated.products";
 
 service ProductService {
     rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+    rpc GetProductsOfShop(GetProductsOfShopRequest) returns (GetProductsOfShopResponse);
 }

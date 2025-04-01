@@ -1,5 +1,6 @@
 package com.ecommerceapp.products.adapter.db.mongo.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -28,6 +29,13 @@ public class MongoProductRepository implements ProductRepository {
         Query q = new Query(
                 Criteria.where("_id").is(id));
         return mongoTemplate.find(q, Product.class).stream().findFirst();
+    }
+
+    @Override
+    public List<Product> findProductsByShopId(String shopId) {
+        Query q = new Query(
+                Criteria.where("shopId").is(shopId));
+        return mongoTemplate.find(q, Product.class);
     }
 
 }

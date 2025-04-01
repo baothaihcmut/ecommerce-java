@@ -10,11 +10,15 @@ import org.mapstruct.ReportingPolicy;
 
 import com.ecommerceapp.generated.products.CreateProductRequest;
 import com.ecommerceapp.generated.products.CreateProductResponse;
+import com.ecommerceapp.generated.products.GetProductsOfShopRequest;
+import com.ecommerceapp.generated.products.GetProductsOfShopResponse;
 import com.ecommerceapp.generated.products.ProductResponse;
 import com.ecommerceapp.generated.products.ProductResponse.VariationResponse;
 import com.ecommerceapp.libs.grpc.mappers.ProtoMapper;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductCommand;
+import com.ecommerceapp.products.core.port.inbound.queries.GetProductsOfShopQuery;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult;
+import com.ecommerceapp.products.core.port.inbound.results.GetProductsOfShopResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult.VariationResult;
 
@@ -28,7 +32,14 @@ public interface ProductGrpcMapper {
         })
         CreateProductCommand toCreateProductCommand(CreateProductRequest request);
 
+        GetProductsOfShopQuery toGetProductsOfShopQuery(GetProductsOfShopRequest req);
+
         CreateProductResponse toCreateProductResponse(CreateProductResult result);
+
+        @Mappings(value = {
+                        @Mapping(source = "products", target = "productsList")
+        })
+        GetProductsOfShopResponse toGetProductsOfShopResponse(GetProductsOfShopResult res);
 
         VariationResponse map(VariationResult result);
 

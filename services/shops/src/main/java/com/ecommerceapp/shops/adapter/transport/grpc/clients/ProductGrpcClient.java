@@ -1,12 +1,15 @@
 package com.ecommerceapp.shops.adapter.transport.grpc.clients;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ecommerceapp.generated.products.CreateProductRequest;
 import com.ecommerceapp.generated.products.CreateProductResponse;
+import com.ecommerceapp.generated.products.GetProductsOfShopRequest;
+import com.ecommerceapp.generated.products.GetProductsOfShopResponse;
 import com.ecommerceapp.generated.products.ProductResponse;
 import com.ecommerceapp.generated.products.ProductServiceGrpc.ProductServiceBlockingStub;
 import com.ecommerceapp.libs.exception.AppException;
@@ -42,4 +45,12 @@ public class ProductGrpcClient implements ProductClient {
             throw exception;
         }
     }
+
+    @Override
+    public List<Product> getProductsOfShop(String shopId) {
+        GetProductsOfShopRequest request = GetProductsOfShopRequest.newBuilder().setShopId(shopId).build();
+        GetProductsOfShopResponse response = productServiceBlockingStub.getProductsOfShop(request);
+        return response.getProductsList().stream().map(prod -> productMapper.toProduct(prod)).toList();
+    }
+
 }

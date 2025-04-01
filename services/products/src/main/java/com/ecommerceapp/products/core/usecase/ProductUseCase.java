@@ -15,7 +15,9 @@ import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.exception.ErrorCode;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductCommand;
 import com.ecommerceapp.products.core.port.inbound.handlers.ProductHandler;
+import com.ecommerceapp.products.core.port.inbound.queries.GetProductsOfShopQuery;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult;
+import com.ecommerceapp.products.core.port.inbound.results.GetProductsOfShopResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
 import com.ecommerceapp.products.core.port.outbound.repositories.CategoryRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
@@ -66,6 +68,14 @@ public class ProductUseCase implements ProductHandler {
                                 .product(ProductResult.toProductResult(product))
                                 .build();
 
+        }
+
+        @Override
+        public GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query) {
+                List<Product> products = productRepository.findProductsByShopId(query.getShopId());
+                return GetProductsOfShopResult.builder()
+                                .products(products.stream().map(prod -> ProductResult.toProductResult(prod)).toList())
+                                .build();
         }
 
 }
