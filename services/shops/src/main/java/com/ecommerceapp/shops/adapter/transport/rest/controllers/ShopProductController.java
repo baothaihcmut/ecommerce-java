@@ -1,0 +1,37 @@
+package com.ecommerceapp.shops.adapter.transport.rest.controllers;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerceapp.libs.response.AppResponse;
+import com.ecommerceapp.shops.adapter.transport.rest.dtos.request.CreateProductRequestDTO;
+import com.ecommerceapp.shops.adapter.transport.rest.mappers.ShopProductMapper;
+import com.ecommerceapp.shops.core.port.inbound.handlers.ShopHandler;
+import com.ecommerceapp.shops.core.port.inbound.results.CreateProductResult;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/shops/{id}/products")
+@RequiredArgsConstructor
+public class ShopProductController {
+    private final ShopHandler shopHandler;
+    private final ShopProductMapper shopProductMapper;
+
+    @PostMapping("/add")
+    public ResponseEntity<AppResponse> addShopProduct(@PathVariable("id") String id,
+            @RequestBody @Valid CreateProductRequestDTO dto) {
+        CreateProductResult result = shopHandler.createProduct(shopProductMapper.toCreateProductCommand(dto, id));
+        return AppResponse.initResponse(
+                HttpStatus.CREATED,
+                true,
+                "create shop product success",
+                shopProductMapper.toCreateProductResponseDTO(result));
+    }
+}

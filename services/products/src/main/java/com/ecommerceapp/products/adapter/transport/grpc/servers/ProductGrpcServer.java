@@ -19,7 +19,6 @@ public class ProductGrpcServer extends ProductServiceImplBase {
 
     @Override
     public void createProduct(CreateProductRequest request, StreamObserver<CreateProductResponse> res) {
-
         CreateProductResult result = productHandler.createProduct(productGrpcMapper.toCreateProductCommand(request));
         res.onNext(productGrpcMapper.toCreateProductResponse(result));
         res.onCompleted();

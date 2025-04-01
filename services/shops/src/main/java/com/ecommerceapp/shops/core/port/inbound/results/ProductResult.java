@@ -3,8 +3,6 @@ package com.ecommerceapp.shops.core.port.inbound.results;
 import java.time.Instant;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
 import com.ecommerceapp.shops.core.domain.entities.Product;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +22,7 @@ public class ProductResult {
     private List<String> images;
     private String thumbnail;
     private List<String> categoryIds;
-    private ObjectId shopId;
+    private String shopId;
 
     @Data
     @AllArgsConstructor
@@ -45,7 +43,7 @@ public class ProductResult {
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
-                .shopId(product.getShopId())
+                .shopId(product.getShopId().toHexString())
                 .images(product.getImages())
                 .thumbnail(product.getThumbnail())
                 .categoryIds(product.getCategoryIds())

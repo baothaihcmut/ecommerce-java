@@ -29,7 +29,7 @@ public class ProductGrpcClient implements ProductClient {
     private final ProductGrpcMapper productMapper;
 
     public Product createProduct(CreateProductCommand createProductCommand) {
-        CreateProductRequest request = productMapper.toCreateProductRequest(createProductCommand);
+        CreateProductRequest request = productMapper.toCreateProductRequest(createProductCommand).build();
         try {
             CreateProductResponse createProductResponse = productServiceBlockingStub.createProduct(request);
             ProductResponse productResponse = createProductResponse.getProduct();

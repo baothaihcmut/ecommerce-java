@@ -1,18 +1,18 @@
-package com.ecommerceapp.libs.mappers;
+package com.ecommerceapp.libs.grpc.mappers;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
-import com.google.protobuf.LazyStringArrayList;
 import com.google.protobuf.ProtocolStringList;
 import com.google.protobuf.Timestamp;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface ProtoMapper {
 
     // for string list
@@ -23,12 +23,6 @@ public interface ProtoMapper {
             return new ArrayList<>();
         }
         return in.stream().toList();
-    }
-
-    @Named("mapListStringToProtoStringList")
-    default ProtocolStringList mapListStringToProtoStringList(List<String> in) {
-        return in == null ? new LazyStringArrayList() : new LazyStringArrayList(in);
-
     }
 
     // for timestamp

@@ -6,6 +6,10 @@ grpc:
     reflection-service-enabled: true  
     security:
       enabled: false
+  client:
+    products-service:
+      address: ${PRODUCTS_SERVICE_URI:static://localhost:9093}
+      negotiationType: plaintext
 spring:
   config:
     import: optional:file:.env[.properties]

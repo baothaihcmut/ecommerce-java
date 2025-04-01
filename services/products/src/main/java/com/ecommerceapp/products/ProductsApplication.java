@@ -14,8 +14,9 @@ import com.ecommerceapp.products.config.ServiceAddressProperties;
 @ComponentScans(value = {
                 @ComponentScan("com.ecommerceapp.products"),
                 @ComponentScan("com.ecommerceapp.libs.exception"),
-                @ComponentScan("com.ecommerceapp.libs.security"),
                 @ComponentScan("com.ecommerceapp.libs.rest"),
+                @ComponentScan("com.ecommerceapp.libs.grpc"),
+                @ComponentScan("com.ecommerceapp.libs.s3"),
                 @ComponentScan(value = "com.ecommerceapp.libs.kafka", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = KafkaConsumerConfig.class)),
 })
 @EnableConfigurationProperties(ServiceAddressProperties.class)

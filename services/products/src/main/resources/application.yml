@@ -5,6 +5,8 @@ grpc:
     shops-service:
       address: "static://localhost:9094"
       negotiationType: plaintext
+  server:
+    port: ${GRPC_PORT:9093}
 
 
 spring:

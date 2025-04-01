@@ -2,9 +2,6 @@ package com.ecommerceapp.shops.adapter.transport.rest.dtos.response;
 
 import java.time.Instant;
 
-import com.ecommerceapp.libs.serializer.ObjectIdSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShopResponseDTO {
 
-    @JsonSerialize(using = ObjectIdSerializer.class)
     private String id;
 
     private String ownerId;

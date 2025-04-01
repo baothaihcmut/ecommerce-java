@@ -14,7 +14,6 @@ import com.ecommerceapp.libs.security.SecurityUtil;
 import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.domain.entities.ProductItem;
-import com.ecommerceapp.products.core.domain.entities.Shop;
 import com.ecommerceapp.products.core.domain.entities.VariationValue;
 import com.ecommerceapp.products.core.exception.ErrorCode;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductItemCommand;
@@ -22,7 +21,6 @@ import com.ecommerceapp.products.core.port.inbound.handlers.ProductItemHandler;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductItemResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductItemResult;
 import com.ecommerceapp.products.core.port.inbound.results.UploadImageResult;
-import com.ecommerceapp.products.core.port.outbound.clients.ShopClient;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductItemRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
 
@@ -33,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 public class ProductItemUseCase implements ProductItemHandler {
         private final ProductRepository productRepository;
         private final ProductItemRepository productItemRepository;
-        private final ShopClient shopClient;
         private final S3Service s3Service;
 
         @Override
@@ -47,12 +44,7 @@ public class ProductItemUseCase implements ProductItemHandler {
                 Product product = productRepository.findProductById(command.getProductId())
                                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXIST));
                 // check if user is owner of shop
-                Shop shop = this.shopClient.findShopById(product.getShopId())
-                                .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
 
-                if (!shop.getShopOwnerId().equals(userContext.userId())) {
-                        throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER);
-                }
                 // check variation
                 List<VariationValue> values = command.getVariationValues().stream()
                                 .map(input -> new VariationValue(input.getVariationId(), input.getValue()))
