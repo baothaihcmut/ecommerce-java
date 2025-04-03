@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerceapp.generated.products.CreateProductRequest;
 import com.ecommerceapp.generated.products.CreateProductResponse;
+import com.ecommerceapp.generated.products.DeleteProductRequest;
 import com.ecommerceapp.generated.products.GetProductsOfShopRequest;
 import com.ecommerceapp.generated.products.GetProductsOfShopResponse;
 import com.ecommerceapp.generated.products.ProductResponse;
@@ -22,6 +23,7 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import products.Pagination.PaginationRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +49,26 @@ public class ProductGrpcClient implements ProductClient {
     }
 
     @Override
-    public List<Product> getProductsOfShop(String shopId) {
-        GetProductsOfShopRequest request = GetProductsOfShopRequest.newBuilder().setShopId(shopId).build();
+    public GetProductOfShopResult getProductsOfShop(String shopId, Integer limit, Integer offset) {
+        GetProductsOfShopRequest request = GetProductsOfShopRequest.newBuilder()
+                .setShopId(shopId)
+                .setPagination(
+                        PaginationRequest.newBuilder()
+                                .setLimit(limit)
+                                .setOffset(offset))
+                .build();
         GetProductsOfShopResponse response = productServiceBlockingStub.getProductsOfShop(request);
-        return response.getProductsList().stream().map(prod -> productMapper.toProduct(prod)).toList();
+
+        List<Product> products = response.getProductsList().stream().map(prod -> productMapper.toProduct(prod))
+                .toList();
+        return new GetProductOfShopResult(products, response.getCount());
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+        DeleteProductRequest req = DeleteProductRequest.newBuilder()
+                .setProductId(product.getId()).build();
+        productServiceBlockingStub.deleteProduct(req);
     }
 
 }

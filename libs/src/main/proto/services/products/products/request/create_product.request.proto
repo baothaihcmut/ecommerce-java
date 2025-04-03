@@ -2,22 +2,15 @@ syntax = "proto3";
 
 package products;
 
-import "google/protobuf/timestamp.proto";
-
-
 option java_multiple_files = true;
 option java_package = "com.ecommerceapp.generated.products";
 
-
-
-
 message CreateProductRequest {
-    string name = 2; 
-    string description = 3; 
-    int32 num_of_image = 4; 
-    bool has_thumbnail = 5; 
-    repeated string category_ids = 6; 
-    string shop_id = 7; 
-    repeated string variations = 8; 
+  string name = 2;
+  string description = 3;
+  int32 num_of_image = 4;
+  bool has_thumbnail = 5;
+  repeated string category_ids = 6;
+  string shop_id = 7;
+  repeated string variations = 8;
 }
-

@@ -1,17 +1,19 @@
-package com.ecommerceapp.products.core.port.inbound.results;
+package com.ecommerceapp.shops.core.port.inbound.results;
 
 import java.util.List;
+
+import com.ecommerceapp.libs.response.PaginationResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
 public class GetProductsOfShopResult {
-    private List<ProductResult> products;
-    private Integer count;
+    private List<ProductWithThumbnailResult> products;
+    private PaginationResponse pagination;
 }

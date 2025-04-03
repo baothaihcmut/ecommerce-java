@@ -1,4 +1,4 @@
-package com.ecommerceapp.products.core.port.inbound.queries;
+package com.ecommerceapp.shops.core.port.inbound.queries;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetProductsOfShopQuery {
     private String shopId;
+    private Boolean hasThumbnail;
     private Integer offset;
     private Integer limit;
 }

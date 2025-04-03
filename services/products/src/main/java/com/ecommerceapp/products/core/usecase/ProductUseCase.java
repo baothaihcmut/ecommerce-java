@@ -14,9 +14,11 @@ import com.ecommerceapp.products.core.domain.entities.Category;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.exception.ErrorCode;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductCommand;
+import com.ecommerceapp.products.core.port.inbound.commands.DeleteProductCommand;
 import com.ecommerceapp.products.core.port.inbound.handlers.ProductHandler;
 import com.ecommerceapp.products.core.port.inbound.queries.GetProductsOfShopQuery;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductResult;
+import com.ecommerceapp.products.core.port.inbound.results.DeleteProductResult;
 import com.ecommerceapp.products.core.port.inbound.results.GetProductsOfShopResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
 import com.ecommerceapp.products.core.port.outbound.repositories.CategoryRepository;
@@ -72,10 +74,23 @@ public class ProductUseCase implements ProductHandler {
 
         @Override
         public GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query) {
-                List<Product> products = productRepository.findProductsByShopId(query.getShopId());
+                ProductRepository.FindProductByShopIdAndCountResult res = productRepository
+                                .findProductsByShopIdAndCount(query.getShopId(), query.getLimit(),
+                                                query.getOffset());
                 return GetProductsOfShopResult.builder()
-                                .products(products.stream().map(prod -> ProductResult.toProductResult(prod)).toList())
+                                .products(res.products().stream().map(prod -> ProductResult.toProductResult(prod))
+                                                .toList())
+                                .count(Integer.valueOf((int) res.count()))
                                 .build();
+        }
+
+        @Override
+        public DeleteProductResult deleteProduct(DeleteProductCommand command) {
+                Product product = productRepository.findProductById(
+                                new ObjectId(command.getProductId()))
+                                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXIST));
+                productRepository.deleteProduct(product);
+                return new DeleteProductResult();
         }
 
 }
