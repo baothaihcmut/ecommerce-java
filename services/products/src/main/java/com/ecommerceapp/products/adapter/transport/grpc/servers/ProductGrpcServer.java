@@ -44,6 +44,7 @@ public class ProductGrpcServer extends ProductServiceImplBase {
                 .getProductsOfShop(productGrpcMapper.toGetProductsOfShopQuery(request));
         response.onNext(productGrpcMapper.toGetProductsOfShopResponse(result));
         response.onCompleted();
+
     }
 
 }

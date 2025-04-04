@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProductResponseDTO {
+public class AddShopProductResponseDTO {
     ProductResponseDTO product;
     PresignUrlInfoResponse thumbnailPresignUrl;
     List<PresignUrlInfoResponse> imagePresignUrls;

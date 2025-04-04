@@ -13,6 +13,7 @@ import com.ecommerceapp.libs.kafka.KafkaConsumerConfig;
         @ComponentScan("com.ecommerceapp.users"),
         @ComponentScan("com.ecommerceapp.libs.exception"),
         @ComponentScan("com.ecommerceapp.libs.redis"),
+        @ComponentScan("com.ecommerceapp.libs.grpc"),
         @ComponentScan(value = "com.ecommerceapp.libs.kafka", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = KafkaConsumerConfig.class)),
 })
 

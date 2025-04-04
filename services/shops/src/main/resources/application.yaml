@@ -10,12 +10,16 @@ grpc:
     products-service:
       address: ${PRODUCTS_SERVICE_URI:static://localhost:9093}
       negotiationType: plaintext
+    users-service:
+      address: ${USERS_SERVICE_URI:static://localhost:9095}
+      negotiationType: plaintext
+
 spring:
   config:
     import: optional:file:.env[.properties]
   data:
     mongodb:
-      uri: mongodb+srv://thaibao22042k4:22042004bao@ecommerce-go.xbph8.mongodb.net/productdb?retryWrites=true&w=majority&appName=ecommerce-go
+      uri: ${MONGO_URI:mongo://localhost:27017}
   kafka:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     consumer:

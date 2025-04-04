@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class CreateProductRequestDTO {
+public class AddShopProductRequestDTO {
     @NotEmpty(message = "name is required")
     private String name;
 

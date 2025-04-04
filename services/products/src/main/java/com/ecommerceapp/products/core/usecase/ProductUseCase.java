@@ -75,8 +75,8 @@ public class ProductUseCase implements ProductHandler {
         @Override
         public GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query) {
                 ProductRepository.FindProductByShopIdAndCountResult res = productRepository
-                                .findProductsByShopIdAndCount(query.getShopId(), query.getLimit(),
-                                                query.getOffset());
+                                .findProductsByShopIdAndCount(query.getShopId(), query.getPagination().getLimit(),
+                                                query.getPagination().getOffset());
                 return GetProductsOfShopResult.builder()
                                 .products(res.products().stream().map(prod -> ProductResult.toProductResult(prod))
                                                 .toList())

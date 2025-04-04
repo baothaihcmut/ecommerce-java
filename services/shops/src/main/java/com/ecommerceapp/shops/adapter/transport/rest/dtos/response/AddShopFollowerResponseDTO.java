@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateShopResponseDTO {
-    private ShopResponseDTO shop;
+public class AddShopFollowerResponseDTO {
+    ShopFollowerResponseDTO shopFollower;
 }

@@ -36,13 +36,13 @@ public interface ProductGrpcMapper {
         })
         CreateProductCommand toCreateProductCommand(CreateProductRequest request);
 
-        GetProductsOfShopQuery toGetProductsOfShopQuery(GetProductsOfShopRequest req);
-
         CreateProductResponse toCreateProductResponse(CreateProductResult result);
 
         DeleteProductCommand toDeleteProductCommand(DeleteProductRequest request);
 
         DeleteProductResponse toDeleteProductResponse(DeleteProductResult result);
+
+        GetProductsOfShopQuery toGetProductsOfShopQuery(GetProductsOfShopRequest request);
 
         @Mappings(value = {
                         @Mapping(source = "products", target = "productsList")

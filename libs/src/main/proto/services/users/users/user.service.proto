@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package users;
+
+import "services/users/users/request/get_user_by_id.request.proto";
+import "services/users/users/request/get_user_by_id_list.request.proto";
+
+import "services/users/users/response/get_user_by_id.response.proto";
+import "services/users/users/response/get_user_by_id_list.response.proto";
+
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.users";
+
+service UsersService {
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc GetUserByIdList(GetUserByIdListRequest) returns (GetUserByIdListResponse);
+}

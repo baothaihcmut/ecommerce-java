@@ -9,11 +9,15 @@ import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
+import com.ecommerceapp.libs.queries.PaginationQuery;
 import com.google.protobuf.ProtocolStringList;
 import com.google.protobuf.Timestamp;
 
+import products.Pagination.PaginationRequest;
+
 @Mapper(componentModel = "spring", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface ProtoMapper {
+    PaginationQuery map(PaginationRequest request);
 
     // for string list
 

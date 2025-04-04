@@ -20,6 +20,8 @@ import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.shops.core.domain.entities.Product;
 import com.ecommerceapp.shops.core.domain.entities.Shop;
 import com.ecommerceapp.shops.core.exception.ErrorCode;
+import com.ecommerceapp.shops.core.patterns.saga.products.CreateProductSagaAction;
+import com.ecommerceapp.shops.core.patterns.saga.shops.IncreShopProductAmountSagaAction;
 import com.ecommerceapp.shops.core.port.inbound.commands.CreateProductCommand;
 import com.ecommerceapp.shops.core.port.inbound.handlers.ShopProductHandler;
 import com.ecommerceapp.shops.core.port.inbound.queries.GetProductsOfShopQuery;
@@ -29,102 +31,100 @@ import com.ecommerceapp.shops.core.port.inbound.results.ProductResult;
 import com.ecommerceapp.shops.core.port.inbound.results.ProductWithThumbnailResult;
 import com.ecommerceapp.shops.core.port.outbound.clients.ProductClient;
 import com.ecommerceapp.shops.core.port.outbound.repositories.ShopRepository;
-import com.ecommerceapp.shops.core.saga.products.CreateProductSagaAction;
-import com.ecommerceapp.shops.core.saga.shops.IncreShopProductAmountSagaAction;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ShopProductUseCase implements ShopProductHandler {
-        private final ShopRepository shopRepository;
-        private final ProductClient productClient;
-        private final S3Service s3Service;
+    private final ShopRepository shopRepository;
+    private final ProductClient productClient;
+    private final S3Service s3Service;
 
-        @Override
-        @Transactional
-        public CreateProductResult createProduct(CreateProductCommand command) {
-                List<SagaAction<?>> actions = new ArrayList<>();
-                try {
-                        UserContext userContext = SecurityUtil.getUserContext();
-                        if (!userContext.isShopOwnerActive()) {
-                                throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
-                        }
-                        ObjectId shopId = new ObjectId(command.getShopId());
-                        Shop shop = shopRepository.findShopById(shopId)
-                                        .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
-                        if (!userContext.userId().equals(shop.getOwnerId())) {
-                                throw new AppException(ErrorCode.SHOP_NOT_BELONG_TO_USER);
-                        }
-                        // createProduct
-                        CreateProductSagaAction createProductSagaAction = new CreateProductSagaAction(command,
-                                        productClient);
-                        actions.add(createProductSagaAction);
-                        IncreShopProductAmountSagaAction increShopProductAmountSagaAction = new IncreShopProductAmountSagaAction(
-                                        shopRepository, shop, 1);
-                        actions.add(increShopProductAmountSagaAction);
+    @Override
+    @Transactional
+    public CreateProductResult createProduct(CreateProductCommand command) {
+        List<SagaAction<?>> actions = new ArrayList<>();
+        try {
+            UserContext userContext = SecurityUtil.getUserContext();
+            if (!userContext.isShopOwnerActive()) {
+                throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
+            }
+            ObjectId shopId = new ObjectId(command.getShopId());
+            Shop shop = shopRepository.findShopById(shopId)
+                    .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
+            if (!userContext.userId().equals(shop.getOwnerId())) {
+                throw new AppException(ErrorCode.SHOP_NOT_BELONG_TO_USER);
+            }
+            // createProduct
+            CreateProductSagaAction createProductSagaAction = new CreateProductSagaAction(command,
+                    productClient);
+            actions.add(createProductSagaAction);
+            IncreShopProductAmountSagaAction increShopProductAmountSagaAction = new IncreShopProductAmountSagaAction(
+                    shopRepository, shop, 1);
+            actions.add(increShopProductAmountSagaAction);
 
-                        Product product = createProductSagaAction.execute();
-                        increShopProductAmountSagaAction.execute();
+            Product product = createProductSagaAction.execute();
+            increShopProductAmountSagaAction.execute();
 
-                        String thumbnailUrl = this.s3Service.generatePresignUrlForPut(product.getThumbnail(), 30,
-                                        MediaType.IMAGE_PNG);
-                        List<String> imageUrls = product.getImages().stream()
-                                        .map(key -> this.s3Service.generatePresignUrlForPut(key, 30,
-                                                        MediaType.IMAGE_PNG))
-                                        .toList();
-                        return CreateProductResult.builder()
-                                        .product(ProductResult.toProductResult(product))
-                                        .imagePresignUrls(imageUrls.stream()
-                                                        .map(url -> PresignUrlInfoResponse.builder()
-                                                                        .url(url)
-                                                                        .expireAt(Instant.now().plus(30,
-                                                                                        ChronoUnit.MINUTES))
-                                                                        .method("PUT")
-                                                                        .contentType(MediaType.IMAGE_JPEG.toString())
-                                                                        .build())
-                                                        .toList())
-                                        .thumbnailPresignUrl(PresignUrlInfoResponse.builder()
-                                                        .url(thumbnailUrl)
-                                                        .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
-                                                        .contentType(MediaType.IMAGE_PNG.toString())
-                                                        .method("PUT")
-                                                        .build())
-                                        .build();
-                } catch (Exception e) {
-                        for (SagaAction<?> action : actions) {
-                                action.abort();
-                        }
-                        throw e;
-                }
+            String thumbnailUrl = this.s3Service.generatePresignUrlForPut(product.getThumbnail(), 30,
+                    MediaType.IMAGE_PNG);
+            List<String> imageUrls = product.getImages().stream()
+                    .map(key -> this.s3Service.generatePresignUrlForPut(key, 30,
+                            MediaType.IMAGE_PNG))
+                    .toList();
+            return CreateProductResult.builder()
+                    .product(ProductResult.toProductResult(product))
+                    .imagePresignUrls(imageUrls.stream()
+                            .map(url -> PresignUrlInfoResponse.builder()
+                                    .url(url)
+                                    .expireAt(Instant.now().plus(30,
+                                            ChronoUnit.MINUTES))
+                                    .method("PUT")
+                                    .contentType(MediaType.IMAGE_JPEG.toString())
+                                    .build())
+                            .toList())
+                    .thumbnailPresignUrl(PresignUrlInfoResponse.builder()
+                            .url(thumbnailUrl)
+                            .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
+                            .contentType(MediaType.IMAGE_PNG.toString())
+                            .method("PUT")
+                            .build())
+                    .build();
+        } catch (Exception e) {
+            for (SagaAction<?> action : actions) {
+                action.abort();
+            }
+            throw e;
         }
+    }
 
-        @Override
-        public GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query) {
-                ProductClient.GetProductOfShopResult res = productClient
-                                .getProductsOfShop(query.getShopId(), query.getLimit(), query.getOffset());
+    @Override
+    public GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query) {
+        ProductClient.GetProductOfShopResult res = productClient
+                .getProductsOfShop(query.getShopId(), query.getLimit(), query.getOffset());
 
-                List<ProductWithThumbnailResult> results = res.products()
-                                .stream()
-                                .map(product -> ProductWithThumbnailResult.builder()
-                                                .product(ProductResult.toProductResult(product))
-                                                .thumbnailPresignUrlInfo(query.getHasThumbnail()
-                                                                ? PresignUrlInfoResponse.builder()
-                                                                                .url(s3Service.generatePresignUrlForGet(
-                                                                                                product.getId(),
-                                                                                                30,
-                                                                                                MediaType.IMAGE_JPEG))
-                                                                                .contentType(MediaType.IMAGE_JPEG_VALUE)
-                                                                                .expireAt(Instant.now().plus(30,
-                                                                                                ChronoUnit.MINUTES))
-                                                                                .build()
-                                                                : null)
-                                                .build())
-                                .toList();
-                return GetProductsOfShopResult.builder()
-                                .products(results)
-                                .pagination(PaginationResponse.initPaginationResponse(query.getOffset(),
-                                                query.getLimit(), res.count()))
-                                .build();
-        }
+        List<ProductWithThumbnailResult> results = res.products()
+                .stream()
+                .map(product -> ProductWithThumbnailResult.builder()
+                        .product(ProductResult.toProductResult(product))
+                        .thumbnailPresignUrlInfo(query.getHasThumbnail()
+                                ? PresignUrlInfoResponse.builder()
+                                        .url(s3Service.generatePresignUrlForGet(
+                                                product.getId(),
+                                                30,
+                                                MediaType.IMAGE_JPEG))
+                                        .contentType(MediaType.IMAGE_JPEG_VALUE)
+                                        .expireAt(Instant.now().plus(30,
+                                                ChronoUnit.MINUTES))
+                                        .build()
+                                : null)
+                        .build())
+                .toList();
+        return GetProductsOfShopResult.builder()
+                .products(results)
+                .pagination(PaginationResponse.initPaginationResponse(query.getOffset(),
+                        query.getLimit(), res.count()))
+                .build();
+    }
 }

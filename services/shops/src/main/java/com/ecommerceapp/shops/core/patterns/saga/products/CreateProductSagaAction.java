@@ -1,4 +1,4 @@
-package com.ecommerceapp.shops.core.saga.products;
+package com.ecommerceapp.shops.core.patterns.saga.products;
 
 import com.ecommerceapp.libs.saga.SagaAction;
 import com.ecommerceapp.shops.core.domain.entities.Product;
