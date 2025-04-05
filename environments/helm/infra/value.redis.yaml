@@ -1,10 +1,17 @@
 commonLabels:
-    app: ecommerce-app-dependency
+  app: ecommerce-app-dependency
 architecture: standalone
 auth:
   enabled: true
   password: "redispassword"
 master:
   persistence:
-    storageClass: "standard-rwo"
+    storageClass: "local-path"
     size: "500Mi"
+resources:
+  requests:
+    cpu: 0,1
+    memory: 125Mi
+  limit:
+    cpu: 0,2
+    memory: 250Mi

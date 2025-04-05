@@ -1,24 +1,21 @@
-commonLabels:
-    app: ecommerce-app-dependency
 listeners:
   client:
     protocol: PLAINTEXT
   controller:
-    protocol: PLAINTEXT 
+    protocol: PLAINTEXT
   interbroker:
     protocol: PLAINTEXT
-advertisedListeners: "CLIENT://ecommerce-app-kafka-broker-0.ecommerce-app-kafka-broker-headless.ecommerce-app.svc.cluster.local:9092"
 controller:
   replicaCount: 1
   resources:
     requests:
       cpu: "0.1"
-      memory: "250Mi"
+      memory: "125Mi"
     limits:
       cpu: "0.2"
-      memory: "500Mi"
+      memory: "250Mi"
   persistence:
-    storageClass: "standard-rwo"
+    storageClass: "local-path"
 broker:
   replicaCount: 1
   extraConfig: |
@@ -32,22 +29,9 @@ broker:
       cpu: "0.2"
       memory: "500Mi"
   persistence:
-    storageClass: "standard-rwo"
+    storageClass: "local-path"
 kraft:
-  enabled: true 
+  enabled: true
   metadataLogDir: /bitnami/kafka/data/meta
   autoCreateTopicsEnable: true
   clusterId: "185040142880-e0o5rn2ms0d01vclb7oun"
-defaultInitContainers:
-  prepareConfig:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 256Mi
-      requests:
-        cpu: 250m
-        memory: 128Mi
-
-
-
-

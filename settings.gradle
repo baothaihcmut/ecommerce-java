@@ -6,4 +6,3 @@ include ':services:products'
 include ':services:shops'
 include 'gateway'
 
-include 'discovery'

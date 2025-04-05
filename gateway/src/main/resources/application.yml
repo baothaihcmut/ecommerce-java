@@ -12,9 +12,7 @@ spring:
         - StripPrefix=${APP_PREFIX_COUNT:2}
         - name: AuthFilter
           args:
-            openApiEndpoints:
-              - "/auth/sign-up"
-              - "/auth/log-in"
+            openApiEndpoints: "/auth/sign-up,/auth/log-in"
             prefix: ${APP_PREFIX:/api/v1}
       routes:
         - id: auth-service
@@ -31,7 +29,7 @@ spring:
           predicates:
             - Path=${APP_PREFIX:/api/v1}/product/**
         - id: shop-service
-          uri: ${SHOP_SERVICE_URI:http://localhost:8085}
+          uri: ${SHOP_SERVICE_URI:http://localhost:8084}
           predicates:
             - Path=${APP_PREFIX:/api/v1}/shops/**
 jwt:

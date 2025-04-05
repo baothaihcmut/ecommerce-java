@@ -1,8 +1,8 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 
     implementation project(":libs")
@@ -13,5 +13,5 @@ jar {
 }
 
 tasks.named('bootJar') {
-    mainClass = 'com.ecommerceapp.mail.UsersApplication'
+    mainClass = 'com.ecommerceapp.mail.MailApplication'
 }

@@ -5,11 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 
+import com.ecommerceapp.libs.rabbitmq.RabbitMqConsumerConfig;
+
 @SpringBootApplication
 @ComponentScans({
         @ComponentScan("com.ecommerceapp.mail"),
         @ComponentScan("com.ecommerceapp.libs.mailer"),
-        @ComponentScan("com.ecommerceapp.libs.kafka")
+
+        @ComponentScan(basePackageClasses = RabbitMqConsumerConfig.class),
 })
 public class MailApplication {
     public final static String CONSUMER_GROUP_ID = "mail-service";

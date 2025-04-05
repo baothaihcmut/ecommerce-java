@@ -41,6 +41,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            System.out.println(config.getOpenApiEndpoints());
             ServerHttpRequest request = exchange.getRequest();
             if (isSecured(request,
                     config.getOpenApiEndpoints())) {
