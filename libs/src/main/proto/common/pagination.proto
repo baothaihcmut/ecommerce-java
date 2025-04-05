@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package products;
+
+import "google/protobuf/timestamp.proto";
+
+message PaginationRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+}

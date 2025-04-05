@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerceapp.libs.response.AppResponse;
-import com.ecommerceapp.shops.adapter.transport.rest.dtos.request.CreateShopRequestDTO;
+import com.ecommerceapp.shops.adapter.transport.rest.dtos.request.AddShopRequestDTO;
 import com.ecommerceapp.shops.adapter.transport.rest.mappers.ShopMapper;
 import com.ecommerceapp.shops.core.port.inbound.handlers.ShopHandler;
 import com.ecommerceapp.shops.core.port.inbound.results.CreateShopResult;
@@ -25,7 +25,7 @@ public class ShopController {
     private final ShopMapper shopMapper;
 
     @PostMapping("/add")
-    public ResponseEntity<AppResponse> addShop(@RequestBody @Valid CreateShopRequestDTO dto) {
+    public ResponseEntity<AppResponse> addShop(@RequestBody @Valid AddShopRequestDTO dto) {
         CreateShopResult res = shopHandler.createShop(shopMapper.toCreateShopCommand(dto));
         return AppResponse.initResponse(
                 HttpStatus.CREATED,

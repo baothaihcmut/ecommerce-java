@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -61,6 +62,21 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private ShopOwner shopOwner;
+
+    public User(
+            UUID id,
+            String email,
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            Boolean isShopOwnerActive) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.isShopOwnerActive = isShopOwnerActive;
+    }
 
     public User(
             String email,

@@ -32,10 +32,22 @@ public class MongoProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<Product> findProductsByShopId(String shopId) {
+    public FindProductByShopIdAndCountResult findProductsByShopIdAndCount(String shopId, Integer limit,
+            Integer offset) {
         Query q = new Query(
                 Criteria.where("shopId").is(shopId));
-        return mongoTemplate.find(q, Product.class);
+        q.skip(offset);
+        q.limit(limit);
+        List<Product> products = mongoTemplate.find(q, Product.class);
+        Query qCount = new Query(
+                Criteria.where("shopId").is(shopId));
+        long count = mongoTemplate.count(qCount, Product.class);
+        return new FindProductByShopIdAndCountResult(products, count);
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+        mongoTemplate.remove(product);
     }
 
 }

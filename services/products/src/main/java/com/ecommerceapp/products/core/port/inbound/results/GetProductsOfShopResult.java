@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GetProductsOfShopResult {
-    List<ProductResult> products;
+    private List<ProductResult> products;
+    private Integer count;
 }

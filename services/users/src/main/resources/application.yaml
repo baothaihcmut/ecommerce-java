@@ -1,5 +1,11 @@
 server:
   port: ${SERVER_PORT:8083}
+grpc:
+  server:
+    port: ${GRPC_PORT:9095}  
+    reflection-service-enabled: true  
+    security:
+      enabled: false
 spring:
   application:
     name: users
@@ -14,11 +20,12 @@ spring:
     hibernate:
       ddl-auto: update  
     show-sql: true
-  redis:
-    host: ${REDIST_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    password: "" 
-    database: 0
+  data:
+    redis:
+      host: ${REDIST_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: "" 
+      database: 0
   kafka:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     producer:

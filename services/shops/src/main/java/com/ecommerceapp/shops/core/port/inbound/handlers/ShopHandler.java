@@ -1,7 +1,6 @@
 package com.ecommerceapp.shops.core.port.inbound.handlers;
 
 import com.ecommerceapp.shops.core.port.inbound.commands.CreateShopCommand;
-
 import com.ecommerceapp.shops.core.port.inbound.commands.UpdateShopCommand;
 import com.ecommerceapp.shops.core.port.inbound.queries.GetShopByIdQuery;
 import com.ecommerceapp.shops.core.port.inbound.results.CreateShopResult;

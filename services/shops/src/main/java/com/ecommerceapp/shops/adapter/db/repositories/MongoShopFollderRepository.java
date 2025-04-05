@@ -1,5 +1,6 @@
 package com.ecommerceapp.shops.adapter.db.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -34,6 +35,19 @@ public class MongoShopFollderRepository implements ShopFollowerRepository {
                 Criteria.where("userId").is(userId)
                         .and("shopId").is(shopId));
         return mongoTemplate.find(q, ShopFollower.class).stream().findFirst();
+    }
+
+    @Override
+    public FindShopFollowersByShopIdAndCountResult findShopFollowersByShopIdAndCount(ObjectId shopId, Integer limit,
+            Integer offset) {
+        Query q = new Query(
+                Criteria.where("shopId").is(shopId));
+        q.skip(offset);
+        q.limit(limit);
+        List<ShopFollower> followers = mongoTemplate.find(q, ShopFollower.class);
+        Query qCount = new Query(Criteria.where("shopId").is(shopId));
+        long count = mongoTemplate.count(qCount, ShopFollower.class);
+        return new FindShopFollowersByShopIdAndCountResult(followers, count);
     }
 
 }

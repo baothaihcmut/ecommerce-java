@@ -10,7 +10,12 @@ import com.ecommerceapp.products.core.domain.entities.Product;
 public interface ProductRepository {
     void save(Product product);
 
+    void deleteProduct(Product product);
+
     Optional<Product> findProductById(ObjectId id);
 
-    List<Product> findProductsByShopId(String shopId);
+    public record FindProductByShopIdAndCountResult(List<Product> products, long count) {
+    }
+
+    FindProductByShopIdAndCountResult findProductsByShopIdAndCount(String shopId, Integer limit, Integer offset);
 }

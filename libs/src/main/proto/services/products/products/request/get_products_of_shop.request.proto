@@ -2,12 +2,13 @@ syntax = "proto3";
 
 package products;
 
+import "common/pagination.proto";
 import "google/protobuf/timestamp.proto";
-
 
 option java_multiple_files = true;
 option java_package = "com.ecommerceapp.generated.products";
 
 message GetProductsOfShopRequest {
-    string shopId=1;
+  string shopId = 1;
+  PaginationRequest pagination = 2;
 }
