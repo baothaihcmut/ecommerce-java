@@ -44,8 +44,8 @@ public class ShopProductController {
         public ResponseEntity<AppResponse> getProductsOfShop(
                         @PathVariable("id") String shopId,
                         @RequestParam(value = "has_thumbnail", required = false, defaultValue = "false") boolean hasThumbnail,
-                        @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
-                        @RequestParam(value = "offset", required = false, defaultValue = "0") int offset) {
+                        @RequestParam(required = false, defaultValue = "10") int limit,
+                        @RequestParam(required = false, defaultValue = "0") int offset) {
                 GetProductsOfShopResult res = shopHandler.getProductsOfShop(
                                 GetProductsOfShopQuery.builder()
                                                 .shopId(shopId)

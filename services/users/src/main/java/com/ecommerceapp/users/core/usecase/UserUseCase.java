@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.users.core.domain.entities.User;
@@ -21,25 +22,26 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserUseCase implements UserHandler {
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    @Override
-    public GetUserByIdResult getUserById(GetUserByIdQuery query) {
-        User user = userRepository.findUserById(UUID.fromString(query.getId()))
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return GetUserByIdResult.builder()
-                .user(UserResult.toUserResult(user))
-                .build();
-    }
+        @Override
+        public GetUserByIdResult getUserById(GetUserByIdQuery query) {
+                User user = userRepository.findUserById(UUID.fromString(query.getId()))
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+                return GetUserByIdResult.builder()
+                                .user(UserResult.toUserResult(user))
+                                .build();
+        }
 
-    @Override
-    public GetUsersByIdListResult getUserByIdList(GetUsersByIdListQuery query) {
-        List<User> users = userRepository.findUserByIdList(query.getIds().stream()
-                .map(id -> UUID.fromString(id)).toList());
-        return GetUsersByIdListResult.builder()
-                .users(users.stream()
-                        .map(user -> UserResult.toUserResult(user)).toList())
-                .build();
-    }
+        @Override
+        @Transactional(readOnly = true)
+        public GetUsersByIdListResult getUserByIdList(GetUsersByIdListQuery query) {
+                List<User> users = userRepository.findUserByIdList(query.getIds().stream()
+                                .map(id -> UUID.fromString(id)).toList());
+                return GetUsersByIdListResult.builder()
+                                .users(users.stream()
+                                                .map(user -> UserResult.toUserResult(user)).toList())
+                                .build();
+        }
 
 }

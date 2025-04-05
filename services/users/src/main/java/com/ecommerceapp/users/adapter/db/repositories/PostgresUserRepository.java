@@ -11,6 +11,7 @@ import com.ecommerceapp.users.core.port.outbound.repositories.UserRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CompoundSelection;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -31,7 +32,8 @@ public class PostgresUserRepository implements UserRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> root = q.from(User.class);
-        q.select(root).where(cb.equal(root.get("email"), email));
+        q.select(projectionUserWithPassword(cb, root));
+        q.where(cb.equal(root.get("email"), email));
         return entityManager.createQuery(q).getResultList().stream().findFirst();
     }
 
@@ -40,7 +42,8 @@ public class PostgresUserRepository implements UserRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> root = q.from(User.class);
-        q.select(root).where(cb.equal(root.get("phoneNumber"), phoneNumber));
+        q.select(projectionUserWithPassword(cb, root));
+        q.where(cb.equal(root.get("phoneNumber"), phoneNumber));
         return entityManager.createQuery(q).getResultList().stream().findFirst();
     }
 
@@ -49,7 +52,8 @@ public class PostgresUserRepository implements UserRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> root = q.from(User.class);
-        q.select(root).where(cb.equal(root.get("id"), id));
+        q.select(projectionUserWithPassword(cb, root));
+        q.where(cb.equal(root.get("id"), id));
         return entityManager.createQuery(q).getResultList().stream().findFirst();
     }
 
@@ -58,8 +62,31 @@ public class PostgresUserRepository implements UserRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> root = q.from(User.class);
-        q.select(root).where(root.get("id").in(ids));
+        q.select(projectionUserWithoutPassword(cb, root));
+        q.where(root.get("id").in(ids));
         return entityManager.createQuery(q).getResultList();
+    }
+
+    private CompoundSelection<User> projectionUserWithoutPassword(CriteriaBuilder cb, Root<User> root) {
+        return cb.construct(
+                User.class,
+                root.get("id"),
+                root.get("email"),
+                root.get("firstName"),
+                root.get("lastName"),
+                root.get("phoneNumber"),
+                root.get("isShopOwnerActive"));
+    }
+
+    private CompoundSelection<User> projectionUserWithPassword(CriteriaBuilder cb, Root<User> root) {
+        return cb.construct(
+                User.class,
+                root.get("id"),
+                root.get("email"),
+                root.get("firstName"),
+                root.get("lastName"),
+                root.get("phoneNumber"),
+                root.get("isShopOwnerActive"));
     }
 
 }
