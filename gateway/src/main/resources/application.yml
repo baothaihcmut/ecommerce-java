@@ -30,6 +30,10 @@ spring:
           uri: ${PRODUCT_SERVICE_URI:http://localhost:8083}
           predicates:
             - Path=${APP_PREFIX:/api/v1}/product/**
+        - id: shop-service
+          uri: ${SHOP_SERVICE_URI:http://localhost:8085}
+          predicates:
+            - Path=${APP_PREFIX:/api/v1}/shops/**
 jwt:
   secret: "your_accesstoken_key111111111111111111111"
 

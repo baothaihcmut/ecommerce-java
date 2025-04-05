@@ -23,37 +23,37 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ShopFollowerUseCase implements ShopFollowerHandler {
-    private final ShopFollowerRepository shopFollowerRepository;
-    private final ShopRepository shopRepository;
+        private final ShopFollowerRepository shopFollowerRepository;
+        private final ShopRepository shopRepository;
 
-    @Override
-    @Transactional
-    public FollowShopResult followShop(FollowShopCommand followShopCommand) {
-        UserContext userContext = SecurityUtil.getUserContext();
-        Shop shop = shopRepository.findShopById(followShopCommand.getShopId())
-                .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
-        ShopFollower shopFollower = new ShopFollower(shop.getId(), userContext.userId());
-        shop.addFollower();
-        shopFollowerRepository.save(shopFollower);
-        shopRepository.save(shop);
-        return FollowShopResult.builder()
-                .shopFollower(ShopFollowerResult.toSopFollowerResult(shopFollower))
-                .build();
+        @Override
+        @Transactional
+        public FollowShopResult followShop(FollowShopCommand followShopCommand) {
+                UserContext userContext = SecurityUtil.getUserContext();
+                Shop shop = shopRepository.findShopById(followShopCommand.getShopId())
+                                .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
+                ShopFollower shopFollower = new ShopFollower(shop.getId(), userContext.userId());
+                shop.addFollower();
+                shopFollowerRepository.save(shopFollower);
+                shopRepository.save(shop);
+                return FollowShopResult.builder()
+                                .shopFollower(ShopFollowerResult.toSopFollowerResult(shopFollower))
+                                .build();
 
-    }
+        }
 
-    @Override
-    @Transactional
-    public UnFollowShopResult unFollowShop(UnFollowShopCommand unFollowShopCommand) {
-        UserContext userContext = SecurityUtil.getUserContext();
-        Shop shop = shopRepository.findShopById(unFollowShopCommand.getShopId())
-                .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
-        ShopFollower shopFollower = shopFollowerRepository
-                .findByShopIdAndUserId(shop.getId(), userContext.userId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOLLOW_SHOP));
-        shop.deleteFollower();
-        shopRepository.save(shop);
-        shopFollowerRepository.delete(shopFollower);
-        return new UnFollowShopResult();
-    }
+        @Override
+        @Transactional
+        public UnFollowShopResult unFollowShop(UnFollowShopCommand unFollowShopCommand) {
+                UserContext userContext = SecurityUtil.getUserContext();
+                Shop shop = shopRepository.findShopById(unFollowShopCommand.getShopId())
+                                .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
+                ShopFollower shopFollower = shopFollowerRepository
+                                .findByShopIdAndUserId(shop.getId(), userContext.userId())
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOLLOW_SHOP));
+                shop.deleteFollower();
+                shopRepository.save(shop);
+                shopFollowerRepository.delete(shopFollower);
+                return new UnFollowShopResult();
+        }
 }
