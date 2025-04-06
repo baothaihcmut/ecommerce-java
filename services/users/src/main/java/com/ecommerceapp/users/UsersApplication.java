@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.FilterType;
 
-import com.ecommerceapp.libs.kafka.KafkaConsumerConfig;
+import com.ecommerceapp.libs.rabbitmq.RabbitMqConsumerConfig;
 
 @SpringBootApplication
 @ComponentScans({
@@ -14,7 +14,9 @@ import com.ecommerceapp.libs.kafka.KafkaConsumerConfig;
         @ComponentScan("com.ecommerceapp.libs.exception"),
         @ComponentScan("com.ecommerceapp.libs.redis"),
         @ComponentScan("com.ecommerceapp.libs.grpc"),
-        @ComponentScan(value = "com.ecommerceapp.libs.kafka", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = KafkaConsumerConfig.class)),
+        @ComponentScan("com.ecommerceapp.libs.security"),
+        @ComponentScan(basePackages = "com.ecommerceapp.libs.rabbitmq", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = RabbitMqConsumerConfig.class))
+
 })
 
 public class UsersApplication {

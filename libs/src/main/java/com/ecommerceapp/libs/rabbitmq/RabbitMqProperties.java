@@ -7,12 +7,12 @@ import lombok.Data;
 
 @Data
 @ConfigurationPropertiesScan
-@ConfigurationProperties(prefix = "spring.rabbitmq.consumer")
-public class RabbitMqConsumerProperties {
+@ConfigurationProperties(prefix = "spring.rabbitmq")
+public class RabbitMqProperties {
     private String host;
     private Integer port;
     private String username;
     private String password;
-    private String vhost;
+    private String virtualHost;
     private Integer concurrentConsumers;
 }

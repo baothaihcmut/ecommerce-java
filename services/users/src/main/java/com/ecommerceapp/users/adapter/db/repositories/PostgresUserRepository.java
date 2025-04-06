@@ -62,20 +62,9 @@ public class PostgresUserRepository implements UserRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> root = q.from(User.class);
-        q.select(projectionUserWithoutPassword(cb, root));
+        q.select(projectionUserWithPassword(cb, root));
         q.where(root.get("id").in(ids));
         return entityManager.createQuery(q).getResultList();
-    }
-
-    private CompoundSelection<User> projectionUserWithoutPassword(CriteriaBuilder cb, Root<User> root) {
-        return cb.construct(
-                User.class,
-                root.get("id"),
-                root.get("email"),
-                root.get("firstName"),
-                root.get("lastName"),
-                root.get("phoneNumber"),
-                root.get("isShopOwnerActive"));
     }
 
     private CompoundSelection<User> projectionUserWithPassword(CriteriaBuilder cb, Root<User> root) {
@@ -86,7 +75,8 @@ public class PostgresUserRepository implements UserRepository {
                 root.get("firstName"),
                 root.get("lastName"),
                 root.get("phoneNumber"),
-                root.get("isShopOwnerActive"));
+                root.get("isShopOwnerActive"),
+                root.get("password"));
     }
 
 }

@@ -69,13 +69,15 @@ public class User {
             String firstName,
             String lastName,
             String phoneNumber,
-            Boolean isShopOwnerActive) {
+            Boolean isShopOwnerActive,
+            String password) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.isShopOwnerActive = isShopOwnerActive;
+        this.password = password;
     }
 
     public User(
