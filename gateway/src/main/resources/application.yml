@@ -1,5 +1,7 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/api/v1}  # Use a variable to allow dynamic context path configuration
 
 spring:
   main: 
@@ -8,31 +10,25 @@ spring:
     name: gateway
   cloud:
     gateway:
-      default-filters:
-        - StripPrefix=${APP_PREFIX_COUNT:2}
-        - name: AuthFilter
-          args:
-            openApiEndpoints: "/auth/sign-up,/auth/log-in"
-            prefix: ${APP_PREFIX:/api/v1}
+      prefix: ${API_PREFIX:${server.servlet.context-path}}  
+      open-apis:
+        - "${server.servlet.context-path}/auth/log-in" 
+        - "${server.servlet.context-path}/auth/sign-up"
       routes:
-        - id: auth-service
-          uri: ${AUTH_SERVICE_URI:http://localhost:8083}
-          predicates:
-            - Path=${APP_PREFIX:/api/v1}/auth/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: authServiceCircuitBreaker
-                fallbackUri: forward:/fallback/auth
-        - id: product-service
-          uri: ${PRODUCT_SERVICE_URI:http://localhost:8083}
-          predicates:
-            - Path=${APP_PREFIX:/api/v1}/product/**
-        - id: shop-service
-          uri: ${SHOP_SERVICE_URI:http://localhost:8084}
-          predicates:
-            - Path=${APP_PREFIX:/api/v1}/shops/**
+        auth-service: ${AUTH_SERVICE_URI:http://localhost:8081}
+        users-service: ${USER_SERVICE_URI:http://localhost:8081}
+        shops-service: ${SHOP_SERVICE_URI:http://localhost:8082}
+
+springdoc:
+  api-docs:
+    path: "${server.servlet.context-path}/api-docs"  # Dynamically use context-path
+  swagger-ui:
+    path: "${server.servlet.context-path}/swagger-ui.html"  # Dynamically use context-path
+    urls:
+      - name: "Shops service"
+        url: "${server.servlet.context-path}/shops-service/api-docs"  # Use context-path for API docs
+      - name: "Users service"
+        url: "${server.servlet.context-path}/users-service/api-docs"  # Use context-path for API docs
+
 jwt:
   secret: "your_accesstoken_key111111111111111111111"
-
-

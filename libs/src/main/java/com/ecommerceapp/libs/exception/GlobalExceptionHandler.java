@@ -48,18 +48,18 @@ public class GlobalExceptionHandler {
         return AppResponse.initResponse(HttpStatus.BAD_REQUEST, false, "Missing request body", null);
     }
 
-    // Method Not Allowed
-    @ExceptionHandler(value = Exception.class)
-    ResponseEntity<AppResponse> handleRuntimeException(RuntimeException exception) {
-        System.out.println("Errorrrr");
-        System.out.println(exception);
-        return AppResponse.initResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "Internal error", null);
-    }
-
     // IllegalStateException
     @ExceptionHandler(value = NoResourceFoundException.class)
     ResponseEntity<AppResponse> handleNoResourceFoundException(
             NoResourceFoundException exception) {
         return AppResponse.initResponse(HttpStatus.NOT_FOUND, false, "Resource not found", null);
+    }
+
+    // Method Not Allowed
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<AppResponse> handleRuntimeException(Exception exception) {
+        System.out.println("Errorrrr");
+        System.out.println(exception);
+        return AppResponse.initResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "Internal error", null);
     }
 }

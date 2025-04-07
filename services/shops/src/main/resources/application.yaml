@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8084}
+  port: ${SERVER_PORT:8082}
 grpc:
   server:
     port: ${GRPC_PORT:9094}  
@@ -13,6 +13,11 @@ grpc:
     users-service:
       address: ${USERS_SERVICE_URI:static://localhost:9095}
       negotiationType: plaintext
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
 
 spring:
   config:

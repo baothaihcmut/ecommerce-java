@@ -6,6 +6,7 @@ configMap:
   name: server
   data:
     SERVER_PORT: "8080"
+    AUTH_SERVICE_URI: ""
 
 config:
   from: "env"

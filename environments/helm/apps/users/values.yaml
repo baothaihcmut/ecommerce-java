@@ -1,13 +1,17 @@
 image:
   repository: baothaihcmut/ecommerce-users-service
-  tag: v1.0.2
+  tag: v1
   pullPolicy: Always
 configMap:
   name: main
   data:
     SERVER_PORT: "8080"
-    KAFKA_BROKER: ecommerce-kafka.ecommerce-app.svc.cluster.local:9092
-    REDIS_HOST: ecommerce-app-redis-master.ecommerce-app.svc.cluster.local
+    RABBITMQ_HOST: "ecommerce-rabbitmq.ecommerce-app.svc.cluster.local"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_USERNAME: "rabbimq_user"
+    RABBITMQ_PASSWORD: "rabbitmq_password"
+    RABBITMQ_VHOST: "ecommerce-vhost"
+    REDIS_HOST: "ecommerce-app-redis-master.ecommerce-app.svc.cluster.local"
     REDIS_PORT: "6379"
 
 config:
@@ -24,10 +28,10 @@ service:
       targetPort: 8080
 resources:
   requests:
-    cpu: "0.25"
+    cpu: "0.1"
     memory: "128Mi"
   limits:
-    cpu: "0.5"
+    cpu: "0.2"
     memory: "256Mi"
 serviceAccount:
   enabled: true

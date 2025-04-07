@@ -1,0 +1,19 @@
+auth:
+  username: "rabbimq_user"
+  password: "rabbimq_password"
+extraConfiguration: |-
+  default_vhost = ecommerce-vhost
+  default_permissions.configure = .*
+  default_permissions.read = .*
+  default_permissions.write = .*
+
+persistence:
+  storageClass: "local-path"
+
+resources:
+  requests:
+    cpu: "0.1"
+    memory: "125Mi"
+  limits:
+    cpu: "0.2"
+    memory: "250Mi"

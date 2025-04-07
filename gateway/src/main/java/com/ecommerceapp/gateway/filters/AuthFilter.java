@@ -41,7 +41,6 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            System.out.println(config.getOpenApiEndpoints());
             ServerHttpRequest request = exchange.getRequest();
             if (isSecured(request,
                     config.getOpenApiEndpoints())) {
@@ -61,6 +60,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     }
 
     private boolean isSecured(ServerHttpRequest request, List<String> openApis) {
+        System.out.println(request.getURI().getPath());
         return openApis.stream().noneMatch(uri -> request.getURI().getPath().contains(uri));
     }
 
@@ -103,6 +103,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Config {
+        private String prefix;
         private List<String> openApiEndpoints;
     }
 }
