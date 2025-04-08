@@ -7,9 +7,12 @@ grpc:
     security:
       enabled: false
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: users
   datasource:
+    enabled: "true"
     url: ${DB_URL:jdbc:postgresql://ep-tight-glitter-a17vbx2k-pooler.ap-southeast-1.aws.neon.tech/ecommerce-go-users?sslmode=require}
     username: ${DB_USER:neondb_owner}
     password: ${DB_PASSWORD:npg_ARFzU8NZupg7}
@@ -22,17 +25,30 @@ spring:
     show-sql: true
   data:
     redis:
-      host: ${REDIST_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: "" 
+      enabled: "true"
+      host: ${REDIS_HOST:redis-13770.c321.us-east-1-2.ec2.redns.redis-cloud.com}
+      port: ${REDIS_PORT:13770}
+      password: ${REDIS_PASSWORD:Tazqqr2OljF2IGBJQ5pkz8RAbbpSCGkN}
+      username: ${REDIS_USERNAME:default} 
       database: 0
   rabbitmq:
+    enabled: "true"
+    uri: ${RABBITMQ_URI}
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     virtual-host: ${RABBITMQ_VHOST:/ecommerce-app}
 
+springdoc:
+  info:
+    title: "Users service"
+    description: "Users service"
+    version: "v1.0.0"
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
 
 jwt:
   access_token:

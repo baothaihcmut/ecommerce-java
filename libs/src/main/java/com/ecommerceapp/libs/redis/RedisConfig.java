@@ -1,5 +1,6 @@
 package com.ecommerceapp.libs.redis;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "spring.data.redis.enabled", havingValue = "true", matchIfMissing = false)
 @EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig {
     private final RedisProperties redisProperties;
@@ -20,9 +22,11 @@ public class RedisConfig {
     @Bean
     public RedissonClient redissionClient() {
         Config config = new Config();
-        System.out.println(redisProperties.getHost());
+        System.out.println(redisProperties.getPassword());
         config.useSingleServer()
-                .setAddress(String.format("redis://%s:%d", redisProperties.getHost(), redisProperties.getPort()));
+                .setAddress(String.format("redis://%s:%d", redisProperties.getHost(), redisProperties.getPort()))
+                .setPassword(redisProperties.getPassword())
+                .setUsername(redisProperties.getUsername());
         return org.redisson.Redisson.create(config);
     }
 

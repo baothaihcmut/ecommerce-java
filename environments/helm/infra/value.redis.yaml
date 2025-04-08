@@ -4,7 +4,7 @@ auth:
   password: "redispassword"
 master:
   persistence:
-    storageClass: "local-path"
+    storageClass: "standard-rwo"
     size: "500Mi"
 resources:
   requests:

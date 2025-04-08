@@ -6,11 +6,7 @@ configMap:
   name: main
   data:
     SERVER_PORT: "8080"
-    RABBITMQ_HOST: "ecommerce-rabbitmq.ecommerce-app.svc.cluster.local"
-    RABBITMQ_PORT: "5672"
-    RABBITMQ_USERNAME: "rabbimq_user"
-    RABBITMQ_PASSWORD: "rabbitmq_password"
-    RABBITMQ_VHOST: "ecommerce-vhost"
+    RABBITMQ_URI: "amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh"
 
 config:
   from: "env"
@@ -26,10 +22,10 @@ service:
       targetPort: 8080
 resources:
   requests:
-    cpu: "0.1"
+    cpu: "0.2"
     memory: "128Mi"
   limits:
-    cpu: "0.2"
+    cpu: "0.4"
     memory: "256Mi"
 serviceAccount:
   enabled: true

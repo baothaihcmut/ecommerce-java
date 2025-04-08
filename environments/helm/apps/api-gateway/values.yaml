@@ -41,22 +41,22 @@ ingressRoutes:
     port: 80
     tls: true
 initContainers: []
-# ingress:
-#   name: api-gateway
-#   className: "gce"
-#   annotations:
-#     networking.gke.io/managed-certificates: ecommerce-cert
-#   rules:
-#     - host: ecommerce-app.spsohcmut.xyz
-#       path: /api
-#       service: api-gateway
-#       port: 80
-#       tls: true
-#       tlsSecret: ecommerce-cert
+ingress:
+  name: api-gateway
+  className: "gce"
+  annotations:
+    networking.gke.io/managed-certificates: ecommerce-cert
+  rules:
+    - host: ecommerce-app.spsohcmut.xyz
+      path: /api
+      service: api-gateway
+      port: 80
+      tls: true
+      tlsSecret: ecommerce-cert
 
-# gkeCerts:
-#   enabled: true
-#   name: ecommerce-cert
-#   domains:
-#     - "ecommerce-app.spsohcmut.xyz"
+gkeCerts:
+  enabled: true
+  name: ecommerce-cert
+  domains:
+    - "ecommerce-app.spsohcmut.xyz"
 

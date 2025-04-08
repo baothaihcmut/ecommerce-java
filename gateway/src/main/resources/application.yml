@@ -15,8 +15,8 @@ spring:
         - "${server.servlet.context-path}/auth/log-in" 
         - "${server.servlet.context-path}/auth/sign-up"
       routes:
-        auth-service: ${AUTH_SERVICE_URI:http://localhost:8081}
-        users-service: ${USER_SERVICE_URI:http://localhost:8081}
+        auth-service: ${AUTH_SERVICE_URI:http://localhost:8083}
+        users-service: ${USER_SERVICE_URI:http://localhost:8083}
         shops-service: ${SHOP_SERVICE_URI:http://localhost:8082}
 
 springdoc:

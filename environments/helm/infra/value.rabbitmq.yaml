@@ -8,7 +8,7 @@ extraConfiguration: |-
   default_permissions.write = .*
 
 persistence:
-  storageClass: "local-path"
+  storageClass: "standard-rwo"
 
 resources:
   requests:

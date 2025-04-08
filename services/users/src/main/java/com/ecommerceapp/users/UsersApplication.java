@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.FilterType;
 
-import com.ecommerceapp.libs.rabbitmq.RabbitMqConsumerConfig;
+import com.ecommerceapp.libs.rabbitmq.RabbitMqConfig;
 
 @SpringBootApplication
 @ComponentScans({
@@ -15,7 +15,8 @@ import com.ecommerceapp.libs.rabbitmq.RabbitMqConsumerConfig;
         @ComponentScan("com.ecommerceapp.libs.redis"),
         @ComponentScan("com.ecommerceapp.libs.grpc"),
         @ComponentScan("com.ecommerceapp.libs.security"),
-        @ComponentScan(basePackages = "com.ecommerceapp.libs.rabbitmq", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = RabbitMqConsumerConfig.class))
+        @ComponentScan(basePackages = "com.ecommerceapp.libs.rabbitmq", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = RabbitMqConfig.class)),
+        @ComponentScan("com.ecommerceapp.libs.docs")
 
 })
 

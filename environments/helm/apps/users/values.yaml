@@ -6,13 +6,11 @@ configMap:
   name: main
   data:
     SERVER_PORT: "8080"
-    RABBITMQ_HOST: "ecommerce-rabbitmq.ecommerce-app.svc.cluster.local"
-    RABBITMQ_PORT: "5672"
-    RABBITMQ_USERNAME: "rabbimq_user"
-    RABBITMQ_PASSWORD: "rabbitmq_password"
-    RABBITMQ_VHOST: "ecommerce-vhost"
-    REDIS_HOST: "ecommerce-app-redis-master.ecommerce-app.svc.cluster.local"
-    REDIS_PORT: "6379"
+    RABBITMQ_URI: "amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh"
+    REDIS_HOST: "redis-13770.c321.us-east-1-2.ec2.redns.redis-cloud.com"
+    REDIS_PORT: "13770"
+    REDIS_PASSWORD: "Tazqqr2OljF2IGBJQ5pkz8RAbbpSCGkN"
+    REDIS_USERNAME: "default"
 
 config:
   from: "env"
@@ -28,11 +26,11 @@ service:
       targetPort: 8080
 resources:
   requests:
-    cpu: "0.1"
-    memory: "128Mi"
-  limits:
-    cpu: "0.2"
+    cpu: "0.4"
     memory: "256Mi"
+  limits:
+    cpu: "0.8"
+    memory: "512Mi"
 serviceAccount:
   enabled: true
   name: wait-dependency

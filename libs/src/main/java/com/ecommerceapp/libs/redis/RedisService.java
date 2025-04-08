@@ -2,6 +2,7 @@ package com.ecommerceapp.libs.redis;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "spring.data.redis.enabled", havingValue = "true", matchIfMissing = false)
 public class RedisService {
     private final ObjectMapper objectMapper;
     private final StringRedisTemplate redisTemplate;
@@ -20,9 +22,10 @@ public class RedisService {
         redisTemplate.opsForValue().set(key, obj, ttl, unit);
     }
 
-    public void setString(String key, String value, long ttl, TimeUnit unit) throws Exception{
-        redisTemplate.opsForValue().set(key, value,ttl,unit);
+    public void setString(String key, String value, long ttl, TimeUnit unit) throws Exception {
+        redisTemplate.opsForValue().set(key, value, ttl, unit);
     }
+
     public String getValueString(String key) throws Exception {
         return redisTemplate.opsForValue().get(key);
     }

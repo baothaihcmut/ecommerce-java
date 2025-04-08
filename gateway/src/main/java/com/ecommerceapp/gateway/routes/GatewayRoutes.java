@@ -15,35 +15,39 @@ import lombok.RequiredArgsConstructor;
 @EnableConfigurationProperties(GatewayProperties.class)
 @RequiredArgsConstructor
 public class GatewayRoutes {
-        private final GatewayProperties properties;
-        private final AuthFilter authFilter;
+    private final GatewayProperties properties;
+    private final AuthFilter authFilter;
 
-        @Bean
-        public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-                return builder.routes()
-                                .route("auth", r -> r
-                                                .path(properties.getPrefix() + "/auth/**")
-                                                .filters(f -> f
-                                                                .stripPrefix(2)
-                                                                .filter(authFilter()))
-                                                .uri(properties.getRoutes().getAuthService()))
-                                .route("shops", r -> r
-                                                .path(properties.getPrefix() + "/shops/**")
-                                                .filters(f -> f
-                                                                .stripPrefix(2)
-                                                                .filter(authFilter()))
-                                                .uri(properties.getRoutes().getShopsService()))
-                                .route("shops-api-docs", r -> r
-                                                .path(properties.getPrefix() + "/shops-service/api-docs")
-                                                .filters(f -> f
-                                                                .stripPrefix(3))
-                                                .uri(properties.getRoutes().getShopsService()))
-                                .build();
-        }
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("auth", r -> r
+                        .path(properties.getPrefix() + "/auth/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter()))
+                        .uri(properties.getRoutes().getAuthService()))
+                .route("shops", r -> r
+                        .path(properties.getPrefix() + "/shops/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter()))
+                        .uri(properties.getRoutes().getShopsService()))
+                .route("shops-api-docs", r -> r
+                        .path(properties.getPrefix() + "/shops-service/api-docs")
+                        .filters(f -> f
+                                .stripPrefix(3))
+                        .uri(properties.getRoutes().getShopsService()))
+                .route("users-api-docs", r -> r
+                        .path(properties.getPrefix() + "/users-service/api-docs")
+                        .filters(f -> f.stripPrefix(3))
+                        .uri(properties.getRoutes().getUsersService()))
+                .build();
+    }
 
-        private GatewayFilter authFilter() {
-                return authFilter.apply(new AuthFilter.Config(
-                                properties.getPrefix(),
-                                properties.getOpenApis()));
-        }
+    private GatewayFilter authFilter() {
+        return authFilter.apply(new AuthFilter.Config(
+                properties.getPrefix(),
+                properties.getOpenApis()));
+    }
 }

@@ -60,7 +60,6 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     }
 
     private boolean isSecured(ServerHttpRequest request, List<String> openApis) {
-        System.out.println(request.getURI().getPath());
         return openApis.stream().noneMatch(uri -> request.getURI().getPath().contains(uri));
     }
 

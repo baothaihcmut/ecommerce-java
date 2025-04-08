@@ -1,5 +1,6 @@
 package com.ecommerceapp.libs.s3;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
 @EnableConfigurationProperties(S3Properties.class)
+@ConditionalOnProperty(name = "aws.s3.enabled", havingValue = "true", matchIfMissing = false)
 @RequiredArgsConstructor
 public class S3Config {
         private final S3Properties s3Properties;

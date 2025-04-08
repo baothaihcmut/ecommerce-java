@@ -2,6 +2,7 @@ package com.ecommerceapp.libs.s3;
 
 import java.time.Duration;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequ
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 @Service
+@ConditionalOnProperty(name = "aws.s3.enabled", havingValue = "true", matchIfMissing = false)
 @RequiredArgsConstructor
 public class S3Service {
     private final S3Properties s3Properties;

@@ -2,6 +2,7 @@ package com.ecommerceapp.libs.mailer;
 
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @EnableConfigurationProperties(MailProperties.class)
+@ConditionalOnProperty(name = "dependencies.mailer.enabled", havingValue = "true", matchIfMissing = false)
 @Service
 public class MailerService {
     private final JavaMailSender mailSender;

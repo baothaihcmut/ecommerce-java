@@ -1,20 +1,17 @@
 package com.ecommerceapp.libs.response;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import lombok.Builder;
 import lombok.Data;
+
 @Data
 @Builder
-public class AppResponse {
+public class AppResponse<T> {
     private boolean success;
     private String message;
-    private Object data;
+    private T data;
 
-    public static ResponseEntity<AppResponse> initResponse(
-            HttpStatus status, boolean success, String message, Object data) {
-        return ResponseEntity.status(status)
-                .body(AppResponse.builder().success(success).message(message).data(data).build());
+    public static <T> AppResponse<T> initResponse(
+            boolean success, String message, T data) {
+        return new AppResponse<T>(success, message, data);
     }
 }

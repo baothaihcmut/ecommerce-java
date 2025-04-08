@@ -14,6 +14,10 @@ grpc:
       address: ${USERS_SERVICE_URI:static://localhost:9095}
       negotiationType: plaintext
 springdoc:
+  info:
+    title: "Shops service"
+    description: "Shops service"
+    version: "v1.0.0"
   swagger-ui:
     path: /swagger-ui.html
   api-docs:
@@ -25,13 +29,21 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URI:mongo://localhost:27017}
-  kafka:
-    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
-    consumer:
-      consumer-group-id: "shops-service"
+      database: "shopdb"
+      connection-pool:
+        max-connection: 10
+        min-connection: 2
+        max-connection-idle-time: 5
+  
 aws:
   s3:
+    enabled: "true"
     access-key: ${AWS_ACCESS_KEY}
     secret-key: ${AWS_SECRET_KEY}
     region: us-east-1
     bucket: ecommerce-app-product-bucket
+dependencies:
+  mongo:
+    enabled: true
+  s3:
+    enabled: true

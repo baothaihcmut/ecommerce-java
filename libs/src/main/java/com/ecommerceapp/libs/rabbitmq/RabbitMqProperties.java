@@ -9,6 +9,7 @@ import lombok.Data;
 @ConfigurationPropertiesScan
 @ConfigurationProperties(prefix = "spring.rabbitmq")
 public class RabbitMqProperties {
+    private String uri;
     private String host;
     private Integer port;
     private String username;

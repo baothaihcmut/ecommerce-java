@@ -11,4 +11,7 @@ import lombok.Data;
 public class RedisProperties {
     private String host;
     private Integer port;
+    private String password;
+    private String username;
+
 }
