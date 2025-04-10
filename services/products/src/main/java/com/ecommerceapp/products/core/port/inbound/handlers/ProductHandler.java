@@ -13,4 +13,5 @@ public interface ProductHandler {
     DeleteProductResult deleteProduct(DeleteProductCommand command);
 
     GetProductsOfShopResult getProductsOfShop(GetProductsOfShopQuery query);
+
 }

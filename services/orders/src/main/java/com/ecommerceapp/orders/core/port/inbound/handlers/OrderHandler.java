@@ -5,4 +5,6 @@ import com.ecommerceapp.orders.core.port.inbound.results.CreateOrderResult;
 
 public interface OrderHandler {
     CreateOrderResult createOrder(CreateOrderCommand command);
+
+    void cancelOrderOverdue();
 }

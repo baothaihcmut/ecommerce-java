@@ -51,6 +51,7 @@ public class Order {
     private Instant confirmedAt;
     private Instant shippedAt;
     private Instant recievedAt;
+    private Instant canceledAt;
 
     @Column(nullable = false)
     private int totalAmount;
@@ -76,7 +77,7 @@ public class Order {
         this.id = UUID.randomUUID();
         this.userId = userId;
         this.createdAt = Instant.now();
-        this.status = OrderStatus.CONFIRMED;
+        this.status = OrderStatus.PENDING;
         this.totalAmount = orderLines.stream().map(OrderLine::getSubTotal).reduce(0, Integer::sum);
         // check all product item in same shop
         if (createOrderLineArgs.size() == 0) {
@@ -139,6 +140,11 @@ public class Order {
         }
         this.recievedAt = Instant.now();
         this.status = OrderStatus.DELIVERED;
+    }
+
+    public void canceledOrder() {
+        this.status = OrderStatus.CANCELLED;
+        this.canceledAt = Instant.now();
     }
 
 }

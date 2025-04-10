@@ -1,9 +1,12 @@
-package com.ecommerceapp.libs.events.orders;
+package com.ecommerceapp.orders.adapter.transport.rest.dtos.response;
 
 import java.time.Instant;
 import java.util.List;
 
-public record OrderEvent(
+import com.ecommerceapp.orders.core.domain.enums.OrderStatus;
+import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
+
+public record OrderResponseDTO(
         String id,
         String userId,
         OrderStatus status,
@@ -17,15 +20,5 @@ public record OrderEvent(
         String shippingProviderId,
         int shippingCost,
         int quantity,
-        List<OrderLineEvent> orderLines) {
-    public enum OrderStatus {
-        PENDING,
-        CONFIRMED,
-        SHIPPED,
-        DELIVERED,
-        CANCELLED
-    }
-
-    public enum PaymentMethod {
-    }
+        List<OrderLineResponseDTO> orderLines) {
 }

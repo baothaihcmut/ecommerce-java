@@ -1,5 +1,7 @@
 package com.ecommerceapp.orders.core.usecase;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.entities.ProductItem;
 import com.ecommerceapp.orders.core.domain.entities.Order.CreateOrderLineArg;
+import com.ecommerceapp.orders.core.domain.events.BulkOrderCanceledEvent;
 import com.ecommerceapp.orders.core.domain.events.OrderCreatedEvent;
 import com.ecommerceapp.orders.core.port.inbound.commands.CreateOrderCommand;
 import com.ecommerceapp.orders.core.port.inbound.handlers.OrderHandler;
@@ -36,10 +39,10 @@ public class OrderUseCase implements OrderHandler {
         UserContext userContext = SecurityUtil.getUserContext();
         // find product by id list
         List<ProductItem> productItems = productItemClient.findProductItemByIdList(
-                command.getOrderItems().stream().map(item -> item.getProductItemId()).toList());
+                command.orderItems().stream().map(item -> item.productItemId()).toList());
         Map<String, Integer> mapQuantity = new HashMap<>();
-        command.getOrderItems().forEach((item) -> {
-            mapQuantity.put(item.getProductItemId(), item.getQuantity());
+        command.orderItems().forEach((item) -> {
+            mapQuantity.put(item.productItemId(), item.quantity());
         });
         // map product to quantity
         List<CreateOrderLineArg> productItemWithQuantity = productItems
@@ -52,8 +55,22 @@ public class OrderUseCase implements OrderHandler {
         // save to db
         orderRepository.save(order);
         // publish event
-        orderEventPublisher.publishOrderCreatedEvent(OrderCreatedEvent.builder().order(order).build());
-        return CreateOrderResult.builder().order(OrderResult.toOrderResult(order)).build();
+        orderEventPublisher.publishOrderCreatedEvent(new OrderCreatedEvent(order));
+        return new CreateOrderResult(OrderResult.toOrderResult(order));
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrderOverdue() {
+        List<Order> orders = orderRepository
+                .findOrderWithOrderLinesByCreatedAtBeforeTime(Instant.now().minus(30, ChronoUnit.MINUTES));
+        for (Order order : orders) {
+            order.canceledOrder();
+        }
+        // cancel order
+        orderRepository.bulkCancelOrder(orders);
+        // publish event
+        orderEventPublisher.publishBulkCanceledEvent(new BulkOrderCanceledEvent(orders));
     }
 
 }

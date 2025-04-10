@@ -1,6 +1,9 @@
 package com.ecommerceapp.orders.core.domain.events;
 
+import java.util.List;
+
 import com.ecommerceapp.orders.core.domain.entities.Order;
 
-public record OrderCreatedEvent(Order order) {
+public record BulkOrderCanceledEvent(List<Order> orders) {
+
 }

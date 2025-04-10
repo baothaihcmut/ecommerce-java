@@ -1,5 +1,4 @@
 package com.ecommerceapp.libs.events.orders;
 
-public class OrderCreatedEvent {
-    OrderEvent order;
+public record OrderCreatedEvent(OrderEvent order) {
 }
