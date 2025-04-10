@@ -6,6 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "services/products/products/request/create_product.request.proto";
 import "services/products/products/request/delete_product.request.proto";
 import "services/products/products/request/get_products_of_shop.request.proto";
+
 import "services/products/products/response/create_product.response.proto";
 import "services/products/products/response/delete_product.response.proto";
 import "services/products/products/response/get_products_of_shop.response.proto";
@@ -19,4 +20,5 @@ service ProductService {
   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
 
   rpc GetProductsOfShop(GetProductsOfShopRequest) returns (GetProductsOfShopResponse);
+
 }

@@ -4,5 +4,6 @@ include ':services:users'
 include ':services:mail'
 include ':services:products'
 include ':services:shops'
+include ':services:orders'
 include 'gateway'
 

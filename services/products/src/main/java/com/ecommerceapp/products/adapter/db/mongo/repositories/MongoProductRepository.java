@@ -2,6 +2,10 @@ package com.ecommerceapp.products.adapter.db.mongo.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,15 +38,26 @@ public class MongoProductRepository implements ProductRepository {
     @Override
     public FindProductByShopIdAndCountResult findProductsByShopIdAndCount(String shopId, Integer limit,
             Integer offset) {
-        Query q = new Query(
-                Criteria.where("shopId").is(shopId));
-        q.skip(offset);
-        q.limit(limit);
-        List<Product> products = mongoTemplate.find(q, Product.class);
-        Query qCount = new Query(
-                Criteria.where("shopId").is(shopId));
-        long count = mongoTemplate.count(qCount, Product.class);
-        return new FindProductByShopIdAndCountResult(products, count);
+        try (ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
+            Future<List<Product>> finThread = executorService.submit(() -> {
+                Query q = new Query(
+                        Criteria.where("shopId").is(shopId));
+                q.limit(limit);
+                q.skip(offset);
+                return mongoTemplate.find(q, Product.class);
+            });
+            Future<Long> countThread = executorService.submit(() -> {
+                Query q = new Query(
+                        Criteria.where("shopId").is(shopId));
+                return mongoTemplate.count(q, "products");
+            });
+            return new FindProductByShopIdAndCountResult(finThread.get(), countThread.get());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Error during async execution", e.getCause());
+        }
     }
 
     @Override

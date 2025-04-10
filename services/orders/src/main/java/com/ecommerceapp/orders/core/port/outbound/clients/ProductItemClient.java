@@ -1,0 +1,9 @@
+package com.ecommerceapp.orders.core.port.outbound.clients;
+
+import java.util.List;
+
+import com.ecommerceapp.orders.core.domain.entities.ProductItem;
+
+public interface ProductItemClient {
+    List<ProductItem> findProductItemByIdList(List<String> ids);
+}

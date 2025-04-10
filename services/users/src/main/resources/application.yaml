@@ -17,6 +17,10 @@ spring:
     username: ${DB_USER:neondb_owner}
     password: ${DB_PASSWORD:npg_ARFzU8NZupg7}
     driver-class-name: org.postgresql.Driver
+    connection-pool:
+      max-connection: 10
+      min-connection: 2
+      max-connection-idle-time: 300000
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -31,14 +35,17 @@ spring:
       password: ${REDIS_PASSWORD:Tazqqr2OljF2IGBJQ5pkz8RAbbpSCGkN}
       username: ${REDIS_USERNAME:default} 
       database: 0
+      connection-pool-size: ${REDIS_CONNECTION_POOL_SIZE:5}
+      connection-minimun-idle-size: ${REDIS_CONNECTION_MINIMUM_IDLE_SIZE:2}
+      idle-connection-timeout: 10000
   rabbitmq:
     enabled: "true"
     uri: ${RABBITMQ_URI}
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-    virtual-host: ${RABBITMQ_VHOST:/ecommerce-app}
+    # host: ${RABBITMQ_HOST:localhost}
+    # port: ${RABBITMQ_PORT:5672}
+    # username: ${RABBITMQ_USERNAME:guest}
+    # password: ${RABBITMQ_PASSWORD:guest}
+    # virtual-host: ${RABBITMQ_VHOST:/}
 
 springdoc:
   info:

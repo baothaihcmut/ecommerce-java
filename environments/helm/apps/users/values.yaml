@@ -1,15 +1,15 @@
 image:
   repository: baothaihcmut/ecommerce-users-service
-  tag: v1
+  tag: v1.0.4
   pullPolicy: Always
 configMap:
   name: main
   data:
     SERVER_PORT: "8080"
     RABBITMQ_URI: "amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh"
-    REDIS_HOST: "redis-13770.c321.us-east-1-2.ec2.redns.redis-cloud.com"
-    REDIS_PORT: "13770"
-    REDIS_PASSWORD: "Tazqqr2OljF2IGBJQ5pkz8RAbbpSCGkN"
+    REDIS_HOST: "ecommerce-redis-master.ecommerce-app.svc.cluster.local"
+    REDIS_PORT: "6379"
+    REDIS_PASSWORD: "redispassword"
     REDIS_USERNAME: "default"
 
 config:
@@ -26,11 +26,11 @@ service:
       targetPort: 8080
 resources:
   requests:
-    cpu: "0.4"
-    memory: "256Mi"
+    cpu: "0.3"
+    memory: "200Mi"
   limits:
-    cpu: "0.8"
-    memory: "512Mi"
+    cpu: "0.6"
+    memory: "400Mi"
 serviceAccount:
   enabled: true
   name: wait-dependency

@@ -13,5 +13,8 @@ public class RedisProperties {
     private Integer port;
     private String password;
     private String username;
+    private Integer connectionPoolSize;
+    private Integer connectionMinimunIdleSize;
+    private Integer idleConnectionTimeout;
 
 }

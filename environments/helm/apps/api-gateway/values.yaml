@@ -1,12 +1,13 @@
 image:
-  repository: baothaihcmut/ecommerce-app-api-gateway
-  tag: v1
+  repository: baothaihcmut/ecommerce-api-gateway
+  tag: v1.0.1
   pullPolicy: Always
 configMap:
   name: server
   data:
     SERVER_PORT: "8080"
-    AUTH_SERVICE_URI: ""
+    AUTH_SERVICE_URI: "http://ecommerce-users-service-users-users-service-svc.ecommerce-app.svc.cluster.local:80"
+    USER_SERVICE_URI: "http://ecommerce-users-service-users-users-service-svc.ecommerce-app.svc.cluster.local:80"
 
 config:
   from: "env"
@@ -20,6 +21,7 @@ service:
       protocol: "TCP"
       port: 80
       targetPort: 8080
+  loadBalancerIP: "34.173.10.225"
 resources:
   requests:
     cpu: "0.25"
@@ -35,11 +37,7 @@ serviceAccount:
       resources: ["pods"]
       verbs: ["get", "list", "watch"]
 
-ingressRoutes:
-  - host: "ecommerce-app.spsohcmut.xyz"
-    service: api
-    port: 80
-    tls: true
+
 initContainers: []
 ingress:
   name: api-gateway

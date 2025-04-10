@@ -12,8 +12,8 @@ spring:
     gateway:
       prefix: ${API_PREFIX:${server.servlet.context-path}}  
       open-apis:
-        - "${server.servlet.context-path}/auth/log-in" 
-        - "${server.servlet.context-path}/auth/sign-up"
+        - "/auth/log-in" 
+        - "/auth/sign-up"
       routes:
         auth-service: ${AUTH_SERVICE_URI:http://localhost:8083}
         users-service: ${USER_SERVICE_URI:http://localhost:8083}

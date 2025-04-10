@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package products;
+
+import "services/products/products/response/product.response.proto";
+import "services/products/product_items/response/product_item.response.proto";
+
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.products";
+
+
+message ProductItemWithProductResponse {
+    ProductItemResponse product_item=1;
+    ProductResponse product = 2;
+}

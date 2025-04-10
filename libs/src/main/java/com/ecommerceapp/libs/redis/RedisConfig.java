@@ -26,7 +26,10 @@ public class RedisConfig {
         config.useSingleServer()
                 .setAddress(String.format("redis://%s:%d", redisProperties.getHost(), redisProperties.getPort()))
                 .setPassword(redisProperties.getPassword())
-                .setUsername(redisProperties.getUsername());
+                .setUsername(redisProperties.getUsername())
+                .setConnectionPoolSize(redisProperties.getConnectionPoolSize())
+                .setConnectionMinimumIdleSize(redisProperties.getConnectionMinimunIdleSize())
+                .setIdleConnectionTimeout(redisProperties.getIdleConnectionTimeout());
         return org.redisson.Redisson.create(config);
     }
 

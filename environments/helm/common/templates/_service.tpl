@@ -17,5 +17,6 @@ spec:
       targetPort: {{ .targetPort }}
     {{- end }}
   type: {{ .Values.service.type | default "ClusterIP"}}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP | default ""}}
 {{- end }}
 

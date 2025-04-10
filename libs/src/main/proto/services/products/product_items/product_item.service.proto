@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package products;
+
+import "services/products/product_items/response/get_product_item_with_product_by_id_list.response.proto";
+import "services/products/product_items/request/get_product_item_with_product_by_id_list.request.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.products";
+
+
+service ProductItemService {
+    rpc GetProductItemWithProductByIdList(GetProductItemWithProductByIdListRequest) returns (GetProductItemWithProductByIdListResponse);
+
+}

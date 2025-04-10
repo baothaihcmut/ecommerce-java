@@ -3,7 +3,10 @@ package com.ecommerceapp.products.core.port.inbound.results;
 import java.time.Instant;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.ecommerceapp.products.core.domain.entities.Product;
+import com.ecommerceapp.products.core.domain.projection.ProductProjection;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,6 +67,33 @@ public class ProductResult {
                 .updatedAt(product.getUpdatedAt())
                 .build();
 
+    }
+
+    public static ProductResult toProductResult(ProductProjection productProjection) {
+        return ProductResult.builder()
+                .id(productProjection.getId().toHexString())
+                .name(productProjection.getName())
+                .description(productProjection.getDescription())
+                .images(productProjection.getImages())
+                .thumbnail(productProjection.getThumbnail())
+                .categoryIds(
+                        productProjection.getCategoryIds()
+                                .stream()
+                                .map(ObjectId::toHexString)
+                                .toList())
+                .shopId(productProjection.getShopId())
+                .variations(
+                        productProjection.getVariations()
+                                .stream()
+                                .map(variation -> VariationResult.builder()
+                                        .id(variation.getId().toHexString())
+                                        .name(variation.getName())
+                                        .build())
+                                .toList())
+                .soldTotal(productProjection.getSoldTotal())
+                .createdAt(productProjection.getCreatedAt())
+                .updatedAt(productProjection.getUpdatedAt())
+                .build();
     }
 
 }

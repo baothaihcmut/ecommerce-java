@@ -15,7 +15,7 @@ spring:
             enable: true
   rabbitmq:
     enabled: "true"
-    uri: ${RABBITMQ_URI:amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh}
+    uri: ${RABBITMQ_URI}
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}

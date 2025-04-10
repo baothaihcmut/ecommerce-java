@@ -25,7 +25,10 @@ public class GatewayRoutes {
                         .path(properties.getPrefix() + "/auth/**")
                         .filters(f -> f
                                 .stripPrefix(2)
-                                .filter(authFilter()))
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/auth")))
                         .uri(properties.getRoutes().getAuthService()))
                 .route("shops", r -> r
                         .path(properties.getPrefix() + "/shops/**")

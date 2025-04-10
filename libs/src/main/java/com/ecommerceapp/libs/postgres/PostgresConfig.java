@@ -25,6 +25,9 @@ public class PostgresConfig {
         datasource.setUsername(postgresProperties.getUsername());
         datasource.setPassword(postgresProperties.getPassword());
         datasource.setDriverClassName(postgresProperties.getDriverClassName());
+        datasource.setMaximumPoolSize(postgresProperties.getConnectionPool().getMaxConnection());
+        datasource.setMinimumIdle(postgresProperties.getConnectionPool().getMinConnection());
+        datasource.setIdleTimeout(postgresProperties.getConnectionPool().getMaxConnectionIdleTime());
         return datasource;
     }
 }

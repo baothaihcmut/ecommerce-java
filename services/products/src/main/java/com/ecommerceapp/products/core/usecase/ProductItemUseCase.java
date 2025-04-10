@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +16,16 @@ import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.products.core.domain.entities.Product;
 import com.ecommerceapp.products.core.domain.entities.ProductItem;
 import com.ecommerceapp.products.core.domain.entities.VariationValue;
+import com.ecommerceapp.products.core.domain.projection.ProductItemWithProductProjection;
 import com.ecommerceapp.products.core.exception.ErrorCode;
 import com.ecommerceapp.products.core.port.inbound.commands.CreateProductItemCommand;
 import com.ecommerceapp.products.core.port.inbound.handlers.ProductItemHandler;
+import com.ecommerceapp.products.core.port.inbound.queries.GetProductItemWithProductQuery;
 import com.ecommerceapp.products.core.port.inbound.results.CreateProductItemResult;
+import com.ecommerceapp.products.core.port.inbound.results.GetProductItemWithProductByIdListResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductItemResult;
+import com.ecommerceapp.products.core.port.inbound.results.ProductItemWithProductResult;
+import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
 import com.ecommerceapp.products.core.port.inbound.results.UploadImageResult;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductItemRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
@@ -75,6 +81,22 @@ public class ProductItemUseCase implements ProductItemHandler {
                                                 .toList())
                                 .build();
 
+        }
+
+        @Override
+        public GetProductItemWithProductByIdListResult getProductItemWithProductByIdList(
+                        GetProductItemWithProductQuery query) {
+                List<ProductItemWithProductProjection> res = productItemRepository.findProductItemWithProductByIdList(
+                                query.getIds().stream().map(id -> new ObjectId(id)).toList());
+                List<ProductItemWithProductResult> result = res.stream()
+                                .map(item -> ProductItemWithProductResult.builder()
+                                                .product(item.getProduct() != null
+                                                                ? ProductResult.toProductResult(item.getProduct())
+                                                                : null)
+                                                .productItem(ProductItemResult.toProductItemResult(item))
+                                                .build())
+                                .toList();
+                return GetProductItemWithProductByIdListResult.builder().productItemWithProducts(result).build();
         }
 
 }

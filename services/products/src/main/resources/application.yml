@@ -1,12 +1,8 @@
 server:
-  port: ${SERVER_PORT:8083}
+  port: ${SERVER_PORT:8081}
 grpc:
-  client:
-    shops-service:
-      address: "static://localhost:9094"
-      negotiationType: plaintext
   server:
-    port: ${GRPC_PORT:9093}
+    port: ${GRPC_PORT:9091}
 
 
 spring:
@@ -14,22 +10,21 @@ spring:
     import: optional:file:.env[.properties]
   data:
     mongodb:
+      enabled: "true"
       uri: ${MONGO_URI:mongo://localhost:27017}
-  kafka:
-    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
-  #   producer:
-  #     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-  #     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      database: "productdb"
+      connection-pool:
+        max-connection: 10
+        min-connection: 2
+        max-connection-idle-time: 5
       
 
 
 aws:
   s3:
+    enabled: "true"
     access-key: ${AWS_ACCESS_KEY}
     secret-key: ${AWS_SECRET_KEY}
     region: us-east-1
     bucket: ecommerce-app-product-bucket 
 
-services:
-  address:
-    shop-service: "localhost:8084"

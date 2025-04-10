@@ -23,12 +23,12 @@ import reactor.core.publisher.Mono;
 @Component
 @Order(-2)
 @RequiredArgsConstructor
-public class ErrorHandlerFilter implements ErrorWebExceptionHandler{
+public class ErrorHandlerFilter implements ErrorWebExceptionHandler {
     private final ObjectMapper objectMapper;
 
-   
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+        System.out.println(ex);
         HttpStatusCode status = determineHttpStatus(ex);
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("success", false);
@@ -50,7 +50,7 @@ public class ErrorHandlerFilter implements ErrorWebExceptionHandler{
         return response.writeWith(Mono.just(buffer));
     }
 
-        private HttpStatusCode determineHttpStatus(Throwable ex) {
+    private HttpStatusCode determineHttpStatus(Throwable ex) {
         if (ex instanceof ResponseStatusException) {
             return ((ResponseStatusException) ex).getStatusCode();
         }

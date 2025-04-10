@@ -1,6 +1,6 @@
 image:
   repository: baothaihcmut/ecommerce-mail-service
-  tag: v1
+  tag: v1.0.1
   pullPolicy: Always
 configMap:
   name: main

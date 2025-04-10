@@ -9,6 +9,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ecommerceapp.libs.exception.AppException;
+import com.ecommerceapp.products.core.exception.ErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +53,17 @@ public class ProductItem {
         this.variationValues = values;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
+    }
+
+    public void increaseStock(Integer quantity) {
+        this.quantity += quantity;
+    }
+
+    public void decreaseStock(Integer quanty) {
+        if (quanty > this.quantity) {
+            throw new AppException(ErrorCode.PRODUCT_ITEM_QUANTITY_CAN_NOT_LESS_THAN_ZERO);
+        }
+        this.quantity -= quantity;
     }
 
 }

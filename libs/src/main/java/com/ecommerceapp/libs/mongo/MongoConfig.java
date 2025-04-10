@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableConfigurationProperties(MongoProperties.class)
-@ConditionalOnProperty(name = "spring.data.mongo.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "spring.data.mongodb.enabled", havingValue = "true", matchIfMissing = false)
 @RequiredArgsConstructor
 public class MongoConfig {
     private final MongoProperties mongoProperties;
@@ -38,7 +38,7 @@ public class MongoConfig {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoClient(), mongoProperties.getDatabase());
+    public MongoTemplate mongoTemplate(MongoClient mongoClient) {
+        return new MongoTemplate(mongoClient, mongoProperties.getDatabase());
     }
 }

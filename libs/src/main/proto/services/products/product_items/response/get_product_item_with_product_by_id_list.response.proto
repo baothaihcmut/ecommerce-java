@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package products;
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.products";
+import "services/products/product_items/response/product_item_with_product.response.proto";
+
+message GetProductItemWithProductByIdListResponse {
+    repeated ProductItemWithProductResponse product_item_with_products=1;
+}

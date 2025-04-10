@@ -19,7 +19,9 @@ public enum ErrorCode implements BaseErrorCode {
     CATEGORY_NOT_EXIST(HttpStatus.NOT_FOUND, "category not exist", new HashMap<>()),
     USER_NOT_SHOP_OWNER_ACTIVE(HttpStatus.FORBIDDEN, "user haven't active shop owner", new HashMap<>()),
     PRODUCT_NOT_EXIST(HttpStatus.NOT_FOUND, "product not exist", new HashMap<>()),
-    VARIATION_NOT_EXIST_IN_PRODUCT(HttpStatus.CONFLICT, "variation not exist in product", new HashMap<>());
+    VARIATION_NOT_EXIST_IN_PRODUCT(HttpStatus.CONFLICT, "variation not exist in product", new HashMap<>()),
+    PRODUCT_ITEM_QUANTITY_CAN_NOT_LESS_THAN_ZERO(HttpStatus.CONFLICT, "product item quantity can not be less than 0",
+            new HashMap<>());
 
     private HttpStatus status;
     private String message;
