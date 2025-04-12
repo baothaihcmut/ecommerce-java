@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import com.ecommerceapp.orders.adapter.transport.rest.dtos.request.CreateOrderRequestDTO;
 import com.ecommerceapp.orders.adapter.transport.rest.dtos.response.CreateOrderResponseDTO;
 import com.ecommerceapp.orders.adapter.transport.rest.dtos.response.OrderResponseDTO;
-import com.ecommerceapp.orders.adapter.transport.rest.dtos.response.UpdateOrderResponseDTO;
+import com.ecommerceapp.orders.adapter.transport.rest.dtos.response.UpdateOrderAddressResponseDTO;
 import com.ecommerceapp.orders.core.port.inbound.commands.CreateOrderCommand;
 import com.ecommerceapp.orders.core.port.inbound.commands.CreateOrderCommand.OrderItem;
 import com.ecommerceapp.orders.core.port.inbound.results.CreateOrderResult;
@@ -25,5 +25,5 @@ public interface OrderMapper {
 
         CreateOrderResponseDTO toCreateOrderResponseDTO(CreateOrderResult result);
 
-        UpdateOrderResponseDTO toUpdateOrderResponseDTO(UpdateOrderAddressResult result);
+        UpdateOrderAddressResponseDTO toUpdateOrderResponseDTO(UpdateOrderAddressResult result);
 }
