@@ -24,9 +24,11 @@ public class ExtractUserAuthInterceptor implements ServerInterceptor {
                 String userId = headers.get(Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER));
                 String isShopOwnerActive = headers
                                 .get(Metadata.Key.of("is-shop-owner-active", Metadata.ASCII_STRING_MARSHALLER));
-                UserContext userContext = new UserContext(userId, Boolean.valueOf(isShopOwnerActive));
-                Context context = Context.current()
-                                .withValue(GrpcContextKey.USER_CONTEXT, userContext);
+                Context context = Context.current();
+                if (userId != null) {
+                        context = context.withValue(GrpcContextKey.USER_CONTEXT,
+                                        new UserContext(userId, Boolean.valueOf(isShopOwnerActive)));
+                }
                 return Contexts.interceptCall(context, call, headers, next);
         }
 

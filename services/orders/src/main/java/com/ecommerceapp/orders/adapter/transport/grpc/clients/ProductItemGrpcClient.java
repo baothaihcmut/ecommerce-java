@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import com.ecommerceapp.generated.products.GetProductItemWithProductByIdListRequest;
 import com.ecommerceapp.generated.products.GetProductItemWithProductByIdListResponse;
 import com.ecommerceapp.generated.products.ProductItemServiceGrpc.ProductItemServiceBlockingStub;
+import com.ecommerceapp.libs.grpc.interceptors.InjectUserAuthInterceptor;
 import com.ecommerceapp.orders.adapter.transport.grpc.mappers.ProductItemGrpcMapper;
 import com.ecommerceapp.orders.core.domain.entities.ProductItem;
 import com.ecommerceapp.orders.core.port.outbound.clients.ProductItemClient;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 
@@ -19,6 +21,12 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 public class ProductItemGrpcClient implements ProductItemClient {
     @GrpcClient("products-service")
     private ProductItemServiceBlockingStub productItemServiceBlockingStub;
+
+    @PostConstruct
+    public void applyInterceptor() {
+        productItemServiceBlockingStub = productItemServiceBlockingStub
+                .withInterceptors(new InjectUserAuthInterceptor());
+    }
 
     private final ProductItemGrpcMapper productItemGrpcMapper;
 

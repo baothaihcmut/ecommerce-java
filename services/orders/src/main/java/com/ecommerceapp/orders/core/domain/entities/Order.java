@@ -36,47 +36,47 @@ public class Order {
     @Column(nullable = false)
     private String userId;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column()
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
     private PaymentMethod paymentMethod;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column()
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
     private PaymentProvider paymentProvider;
 
-    @Column()
+    @Column(nullable = true)
     private String recieveAddress;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant paidAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant confirmedAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant shippedAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant recievedAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant canceledAt;
 
     @Column(nullable = false)
     private int totalAmount;
 
-    @Column()
-    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
     private ShipProvider shipProvider;
 
-    @Column()
+    @Column(nullable = true)
     private int shippingCost;
 
     @Column(nullable = false)
@@ -137,6 +137,10 @@ public class Order {
                 throw new AppException(ErrorCode.PAYMENT_PROVIDER_IS_REQUIRED);
             }
             this.paymentProvider = paymentProvider;
+        } else {
+            // if payment method is COD
+            this.status = OrderStatus.PAID;
+            this.paidAt = Instant.now();
         }
     }
 

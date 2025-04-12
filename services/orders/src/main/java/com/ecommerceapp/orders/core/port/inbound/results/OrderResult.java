@@ -6,6 +6,7 @@ import java.util.List;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.enums.OrderStatus;
 import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
+import com.ecommerceapp.orders.core.domain.enums.PaymentProvider;
 import com.ecommerceapp.orders.core.domain.enums.ShipProvider;
 
 public record OrderResult(
@@ -13,13 +14,15 @@ public record OrderResult(
         String userId,
         OrderStatus status,
         PaymentMethod paymentMethod,
+        PaymentProvider paymentProvider,
         String recieveAddress,
         Instant createdAt,
+        Instant paidAt,
         Instant confirmedAt,
         Instant shippedAt,
         Instant recievedAt,
         int totalAmount,
-        ShipProvider shippingProvider,
+        ShipProvider shipProvider,
         int shippingCost,
         int quantity,
         List<OrderLineResult> orderLines) {
@@ -30,8 +33,10 @@ public record OrderResult(
                 order.getUserId(),
                 order.getStatus(),
                 order.getPaymentMethod(),
+                order.getPaymentProvider(),
                 order.getRecieveAddress(),
                 order.getCreatedAt(),
+                order.getPaidAt(),
                 order.getConfirmedAt(),
                 order.getShippedAt(),
                 order.getRecievedAt(),

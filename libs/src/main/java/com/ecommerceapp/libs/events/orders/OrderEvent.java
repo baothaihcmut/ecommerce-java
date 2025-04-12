@@ -20,12 +20,16 @@ public record OrderEvent(
         List<OrderLineEvent> orderLines) {
     public enum OrderStatus {
         PENDING,
+        PROCESSPAYMENT,
+        PAID,
         CONFIRMED,
         SHIPPED,
         DELIVERED,
-        CANCELLED
+        CANCELLED,
     }
 
     public enum PaymentMethod {
+        COD,
+        ADVANCE
     }
 }

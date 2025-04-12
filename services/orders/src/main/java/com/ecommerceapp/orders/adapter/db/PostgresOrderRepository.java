@@ -63,4 +63,14 @@ public class PostgresOrderRepository implements OrderRepository {
         return entityManager.createQuery(q).getResultList().stream().findFirst();
     }
 
+    @Override
+    public Optional<Order> findOrderWithOrderLinesById(UUID id) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> q = cb.createQuery(Order.class);
+        Root<Order> root = q.from(Order.class);
+        root.fetch("orderLines", JoinType.LEFT);
+        q.where(cb.equal(root.get("id"), id));
+        return entityManager.createQuery(q).getResultList().stream().findFirst();
+    }
+
 }

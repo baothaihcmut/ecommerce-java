@@ -7,6 +7,13 @@ grpc:
     products-service:
       address: ${PRODUCTS_SERVICE_URI:static://localhost:18081}
       negotiationType: plaintext
+    payment-service:
+      address: ${PAYMENT_SERVICE_URI:static://localhost:18084}
+      negotiationType: plaintext
+    users-service:
+      address: ${USERS_SERVICE_URI:static://localhost:18085}
+      negotiationType: plaintext
+
 
 
 spring:

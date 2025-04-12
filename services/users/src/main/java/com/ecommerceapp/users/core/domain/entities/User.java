@@ -138,4 +138,11 @@ public class User {
         }
     }
 
+    public void activateShopOwner(String bussinessLince) {
+        ShopOwner shopOwner = new ShopOwner();
+        shopOwner.setBussinessLicense(bussinessLince);
+        shopOwner.setUser(this);
+        this.shopOwner = shopOwner;
+    }
+
 }

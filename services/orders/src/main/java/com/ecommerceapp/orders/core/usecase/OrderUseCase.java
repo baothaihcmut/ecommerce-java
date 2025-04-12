@@ -11,7 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.springframework.security.concurrent.DelegatingSecurityContextCallable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.libs.security.SecurityUtil;
@@ -20,6 +22,7 @@ import com.ecommerceapp.orders.core.domain.entities.Address;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.entities.ProductItem;
 import com.ecommerceapp.orders.core.domain.entities.Order.CreateOrderLineArg;
+import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
 import com.ecommerceapp.orders.core.domain.events.BulkOrderCanceledEvent;
 import com.ecommerceapp.orders.core.domain.events.OrderCreatedEvent;
 import com.ecommerceapp.orders.core.exception.ErrorCode;
@@ -40,7 +43,6 @@ import com.ecommerceapp.orders.core.port.outbound.clients.PaymentClient.MakePaym
 import com.ecommerceapp.orders.core.port.outbound.publishers.OrderEventPublisher;
 import com.ecommerceapp.orders.core.port.outbound.repositories.OrderRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -80,7 +82,7 @@ public class OrderUseCase implements OrderHandler {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public void cancelOrderOverdue() {
         List<Order> orders = orderRepository
                 .findOrderWithOrderLinesByCreatedAtBeforeTime(Instant.now().minus(30, ChronoUnit.MINUTES));
@@ -96,6 +98,7 @@ public class OrderUseCase implements OrderHandler {
     }
 
     @Override
+    @Transactional
     public UpdateOrderAddressResult updateOrderAddress(UpdateOrderAddressCommand command) {
         try (ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
             UserContext userContext = SecurityUtil.getUserContext();
@@ -109,8 +112,9 @@ public class OrderUseCase implements OrderHandler {
                 return address;
             });
             Future<Order> orderThread = executorService.submit(() -> {
-                Order order = orderRepository.findOrderById(UUID.fromString(command.orderId()))
+                Order order = orderRepository.findOrderWithOrderLinesById(UUID.fromString(command.orderId()))
                         .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXIT));
+
                 if (!userContext.userId().equals(order.getUserId())) {
                     throw new AppException(ErrorCode.ORDER_IS_NOT_BELONG_TO_USER);
                 }
@@ -137,10 +141,10 @@ public class OrderUseCase implements OrderHandler {
         } catch (InterruptedException exception) {
             throw new RuntimeException(exception.getMessage(), exception.getCause());
         }
-
     }
 
     @Override
+    @Transactional
     public MakeOrderPaymentResult makeOrderPayment(MakeOrderPaymentCommand command) {
         try (ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
             UserContext userContext = SecurityUtil.getUserContext();
@@ -150,19 +154,18 @@ public class OrderUseCase implements OrderHandler {
                 throw new AppException(ErrorCode.ORDER_IS_NOT_BELONG_TO_USER);
             }
             order.processPayment(command.paymentMethod(), command.paymentProvider());
-            Future<Void> saveDBThread = executorService.submit(() -> {
-                orderRepository.save(order);
-                return null;
-            });
-            Future<String> paymentClientThread = executorService.submit(() -> {
-                return paymentClient.makePayment(
-                        new MakePaymentArg(
-                                order.getId().toString(),
-                                command.ipAddr(),
-                                order.getTotalAmountWithShippingFee(),
-                                order.getPaymentProvider()));
-            });
-            saveDBThread.get();
+            Future<String> paymentClientThread = executorService.submit(
+                    new DelegatingSecurityContextCallable<>(
+                            () -> {
+                                return order.getPaymentMethod().equals(PaymentMethod.COD) ? null
+                                        : paymentClient.makePayment(
+                                                new MakePaymentArg(
+                                                        order.getId().toString(),
+                                                        command.ipAddr(),
+                                                        order.getTotalAmountWithShippingFee(),
+                                                        order.getPaymentProvider()));
+                            }));
+            orderRepository.save(order);
             return new MakeOrderPaymentResult(
                     OrderResult.toOrderResult(order),
                     paymentClientThread.get());

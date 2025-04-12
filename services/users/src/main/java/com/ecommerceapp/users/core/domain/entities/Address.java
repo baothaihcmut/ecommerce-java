@@ -26,9 +26,6 @@ public class Address {
     @Id
     private UUID id;
 
-    @Column(name = "priority", nullable = false)
-    private int priority;
-
     @Column(nullable = false)
     private String street;
 
@@ -46,4 +43,19 @@ public class Address {
     @JsonBackReference
     @ToString.Exclude
     private User user;
+
+    public Address(
+            String street,
+            String town,
+            String city,
+            String province,
+            User user) {
+        this.id = UUID.randomUUID();
+        this.street = street;
+        this.town = town;
+        this.city = city;
+        this.province = province;
+        this.user = user;
+    }
+
 }

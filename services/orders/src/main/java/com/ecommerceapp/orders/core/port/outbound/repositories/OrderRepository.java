@@ -14,6 +14,8 @@ public interface OrderRepository {
 
     List<Order> findOrderWithOrderLinesByCreatedAtBeforeTime(Instant time);
 
+    Optional<Order> findOrderWithOrderLinesById(UUID id);
+
     Optional<Order> findOrderById(UUID id);
 
 }

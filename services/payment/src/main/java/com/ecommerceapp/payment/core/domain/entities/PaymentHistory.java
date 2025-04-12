@@ -40,13 +40,13 @@ public class PaymentHistory {
     @Enumerated(EnumType.ORDINAL)
     private PaymentStatus paymentStatus;
 
-    @Column()
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant successAt;
 
-    @Column()
+    @Column(nullable = true)
     private Instant failureAt;
 
     public PaymentHistory(
@@ -59,6 +59,7 @@ public class PaymentHistory {
         this.orderId = orderId;
         this.amount = amount;
         this.paymentProvider = paymentProvider;
+        this.createdAt = Instant.now();
     }
 
     public void paymentSuccess() {
