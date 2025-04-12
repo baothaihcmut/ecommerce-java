@@ -59,8 +59,8 @@ public class ProductItem {
         this.quantity += quantity;
     }
 
-    public void decreaseStock(Integer quanty) {
-        if (quanty > this.quantity) {
+    public void decreaseStock(Integer quantity) {
+        if (quantity > this.quantity) {
             throw new AppException(ErrorCode.PRODUCT_ITEM_QUANTITY_CAN_NOT_LESS_THAN_ZERO);
         }
         this.quantity -= quantity;

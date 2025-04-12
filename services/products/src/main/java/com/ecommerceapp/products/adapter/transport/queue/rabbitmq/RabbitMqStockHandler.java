@@ -22,14 +22,15 @@ import lombok.RequiredArgsConstructor;
 public class RabbitMqStockHandler {
     private final ProductItemStockHandler productItemStockHandler;
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-decrease", durable = "true"), exchange = @Exchange(value = "orders.event", ignoreDeclarationExceptions = "true"), key = "orders.created"))
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-decrease", durable = "true"), exchange = @Exchange(value = "orders.events", ignoreDeclarationExceptions = "true"), key = "orders.created"))
     public void handleOrderCreatedEvent(OrderCreatedEvent event) {
+        System.out.println("Handle order created event");
         productItemStockHandler.decreaseProductItemStock(new DecreaseProductItemStockCommand(
                 event.order().orderLines().stream()
                         .map(item -> new ProductItemStockInfo(item.productItemId(), item.quantity())).toList()));
     }
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-increase", durable = "true"), exchange = @Exchange(value = "orders.event", ignoreDeclarationExceptions = "true"), key = "orders.bulk-canceled"))
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-increase", durable = "true"), exchange = @Exchange(value = "orders.events", ignoreDeclarationExceptions = "true"), key = "orders.bulk-canceled"))
     public void handleOrderCanceled(BulkOrderCanceledEvent event) {
         List<ProductItemStockInfo> stockInfoList = event.orders().stream()
                 .flatMap(order -> order.orderLines().stream())

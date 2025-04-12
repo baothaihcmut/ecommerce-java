@@ -1,0 +1,36 @@
+server:
+  port: ${SERVER_PORT:8084}
+grpc:
+  server:
+    port: ${GRPC_PORT:18084}
+  
+spring:
+  datasource:
+    enabled: "true"
+    url: ${DB_URL:jdbc:postgresql://localhost/ecommerce-payment}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    connection-pool:
+      max-connection: 10
+      min-connection: 2
+      max-connection-idle-time: 300000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update  
+    show-sql: true
+  config:
+    import: optional:file:.env[.properties]
+  rabbitmq:
+    enabled: "true"
+    uri: ${RABBITMQ_URI:amqp://guest:guest@localhost/}
+
+payment:
+  vnpay:
+    return-url: "http://localhost:8084/return-url"
+    merchant-code: "SNG6MDXS"
+    secure-hash: "86P8HJPC7NHBUBKRCLC48ER9BDHC0B8C"
+    version: "2.1.0"
+    vnpay-url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+  

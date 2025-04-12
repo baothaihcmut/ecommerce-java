@@ -76,20 +76,14 @@ public class ShopProductUseCase implements ShopProductHandler {
             return CreateProductResult.builder()
                     .product(ProductResult.toProductResult(product))
                     .imagePresignUrls(imageUrls.stream()
-                            .map(url -> PresignUrlInfoResponse.builder()
-                                    .url(url)
-                                    .expireAt(Instant.now().plus(30,
-                                            ChronoUnit.MINUTES))
-                                    .method("PUT")
-                                    .contentType(MediaType.IMAGE_JPEG.toString())
-                                    .build())
+                            .map(url -> new PresignUrlInfoResponse(url,
+                                    Instant.now().plus(30,
+                                            ChronoUnit.MINUTES),
+                                    "PUT", MediaType.IMAGE_JPEG.toString()))
                             .toList())
-                    .thumbnailPresignUrl(PresignUrlInfoResponse.builder()
-                            .url(thumbnailUrl)
-                            .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
-                            .contentType(MediaType.IMAGE_PNG.toString())
-                            .method("PUT")
-                            .build())
+                    .thumbnailPresignUrl(new PresignUrlInfoResponse(thumbnailUrl,
+                            Instant.now().plus(30, ChronoUnit.MINUTES), "PUT",
+                            MediaType.IMAGE_PNG.toString()))
                     .build();
         } catch (Exception e) {
             for (SagaAction<?> action : actions) {
@@ -109,15 +103,15 @@ public class ShopProductUseCase implements ShopProductHandler {
                 .map(product -> ProductWithThumbnailResult.builder()
                         .product(ProductResult.toProductResult(product))
                         .thumbnailPresignUrlInfo(query.getHasThumbnail()
-                                ? PresignUrlInfoResponse.builder()
-                                        .url(s3Service.generatePresignUrlForGet(
+                                ? new PresignUrlInfoResponse(
+                                        s3Service.generatePresignUrlForGet(
                                                 product.getId(),
                                                 30,
-                                                MediaType.IMAGE_JPEG))
-                                        .contentType(MediaType.IMAGE_JPEG_VALUE)
-                                        .expireAt(Instant.now().plus(30,
-                                                ChronoUnit.MINUTES))
-                                        .build()
+                                                MediaType.IMAGE_JPEG),
+                                        Instant.now().plus(30,
+                                                ChronoUnit.MINUTES),
+                                        "GET", MediaType.IMAGE_JPEG_VALUE)
+
                                 : null)
                         .build())
                 .toList();

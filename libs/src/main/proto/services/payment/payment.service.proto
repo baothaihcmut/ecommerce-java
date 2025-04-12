@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package payment;
+
+import "services/payment/request/make_payment.request.proto";
+import "services/payment/response/make_payment.response.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.payment";
+
+
+service PaymentService {
+    rpc MakePayment(MakePaymentRequest) returns (MakePaymentResponse);
+}

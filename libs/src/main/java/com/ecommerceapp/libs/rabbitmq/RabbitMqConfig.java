@@ -36,11 +36,11 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
         factory.setConcurrentConsumers(properties.getConcurrentConsumers());
-        factory.setConnectionFactory(connectionFactory());
+        factory.setConnectionFactory(connectionFactory);
         return factory;
     }
 

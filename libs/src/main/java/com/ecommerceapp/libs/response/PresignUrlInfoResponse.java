@@ -2,18 +2,10 @@ package com.ecommerceapp.libs.response;
 
 import java.time.Instant;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record PresignUrlInfoResponse(
+        String url,
+        Instant expireAt,
+        String method,
+        String contentType) {
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class PresignUrlInfoResponse {
-    private String url;
-    private Instant expireAt;
-    private String method;
-    private String contentType;
 }

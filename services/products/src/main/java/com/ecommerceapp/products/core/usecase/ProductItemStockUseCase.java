@@ -38,7 +38,7 @@ public class ProductItemStockUseCase implements ProductItemStockHandler {
         }
         this.productItemRepository.bulkSave(productItems);
         return IncreaseProductItemStockResult.builder().productItem(
-                productItems.stream().map(item -> ProductItemResult.toProductItemResult(item)).toList()).build();
+                productItems.stream().map(item -> ProductItemResult.fromProductItem(item)).toList()).build();
     }
 
     @Override
@@ -49,12 +49,13 @@ public class ProductItemStockUseCase implements ProductItemStockHandler {
         });
         List<ProductItem> productItems = productItemRepository.findProductItemByIdList(
                 command.getProductItemStocks().stream().map(info -> new ObjectId(info.getProductId())).toList());
+        System.out.println(productItems);
         for (ProductItem productItem : productItems) {
             productItem.decreaseStock(mapQuantity.get(productItem.getId().toHexString()));
         }
         this.productItemRepository.bulkSave(productItems);
         return DecreaseProductItemStockResult.builder().productItem(
-                productItems.stream().map(item -> ProductItemResult.toProductItemResult(item)).toList()).build();
+                productItems.stream().map(item -> ProductItemResult.fromProductItem(item)).toList()).build();
     }
 
 }

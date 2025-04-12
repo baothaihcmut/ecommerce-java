@@ -67,10 +67,12 @@ public class OrderUseCase implements OrderHandler {
         for (Order order : orders) {
             order.canceledOrder();
         }
-        // cancel order
-        orderRepository.bulkCancelOrder(orders);
-        // publish event
-        orderEventPublisher.publishBulkCanceledEvent(new BulkOrderCanceledEvent(orders));
+        if (orders.size() > 0) {
+            // cancel order
+            orderRepository.bulkCancelOrder(orders);
+            // publish event
+            orderEventPublisher.publishBulkCanceledEvent(new BulkOrderCanceledEvent(orders));
+        }
     }
 
 }

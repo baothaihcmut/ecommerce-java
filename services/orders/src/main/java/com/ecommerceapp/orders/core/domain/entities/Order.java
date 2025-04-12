@@ -78,7 +78,6 @@ public class Order {
         this.userId = userId;
         this.createdAt = Instant.now();
         this.status = OrderStatus.PENDING;
-        this.totalAmount = orderLines.stream().map(OrderLine::getSubTotal).reduce(0, Integer::sum);
         // check all product item in same shop
         if (createOrderLineArgs.size() == 0) {
             throw new AppException(ErrorCode.ORDER_LINE_EQUAL_ZERO);
@@ -89,6 +88,7 @@ public class Order {
         this.checkProductItemOutofStock(createOrderLineArgs);
         this.orderLines = createOrderLineArgs.stream()
                 .map((arg) -> new OrderLine(this, arg.productItem(), arg.quantity())).toList();
+        this.totalAmount = orderLines.stream().map(OrderLine::getSubTotal).reduce(0, Integer::sum);
 
     }
 
@@ -100,7 +100,7 @@ public class Order {
     private void checkProductItemOutofStock(List<CreateOrderLineArg> args) {
         // get product out of stock
         List<ProductItem> outOfStockItem = args.stream()
-                .filter(item -> item.productItem().getQuantity() > item.quantity())
+                .filter(item -> item.productItem().getQuantity() < item.quantity())
                 .map(item -> item.productItem())
                 .toList();
         if (outOfStockItem.size() > 0) {

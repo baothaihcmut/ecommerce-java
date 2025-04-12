@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.exception.AppException;
+import com.ecommerceapp.libs.response.PresignUrlInfoResponse;
 import com.ecommerceapp.libs.s3.S3Service;
 import com.ecommerceapp.libs.security.SecurityUtil;
 import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
@@ -26,7 +27,6 @@ import com.ecommerceapp.products.core.port.inbound.results.GetProductItemWithPro
 import com.ecommerceapp.products.core.port.inbound.results.ProductItemResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductItemWithProductResult;
 import com.ecommerceapp.products.core.port.inbound.results.ProductResult;
-import com.ecommerceapp.products.core.port.inbound.results.UploadImageResult;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductItemRepository;
 import com.ecommerceapp.products.core.port.outbound.repositories.ProductRepository;
 
@@ -47,21 +47,23 @@ public class ProductItemUseCase implements ProductItemHandler {
                         throw new AppException(ErrorCode.USER_NOT_SHOP_OWNER_ACTIVE);
                 }
                 // check product exist
-                Product product = productRepository.findProductById(command.getProductId())
+                ObjectId productId = new ObjectId(command.productId());
+                Product product = productRepository.findProductById(productId)
                                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXIST));
                 // check if user is owner of shop
 
                 // check variation
-                List<VariationValue> values = command.getVariationValues().stream()
-                                .map(input -> new VariationValue(input.getVariationId(), input.getValue()))
+                List<VariationValue> values = command.variationValues().stream()
+                                .map(input -> new VariationValue(
+                                                new ObjectId(input.variationId()), input.value()))
                                 .toList();
                 product.checkVarions(values);
 
                 ProductItem productItem = new ProductItem(
-                                command.getProductId(),
-                                command.getQuantity(),
-                                command.getPrice(),
-                                command.getNumOfImages(),
+                                productId,
+                                command.quantity(),
+                                command.price(),
+                                command.numOfImages(),
                                 values);
                 // save to db
                 this.productItemRepository.save(productItem);
@@ -69,17 +71,13 @@ public class ProductItemUseCase implements ProductItemHandler {
                 List<String> urls = productItem.getImages().stream()
                                 .map(key -> s3Service.generatePresignUrlForPut(key, 30, MediaType.IMAGE_JPEG))
                                 .toList();
-                return CreateProductItemResult.builder()
-                                .productItem(ProductItemResult.toProductItemResult(productItem))
-                                .uploadImagesInfo(urls.stream()
-                                                .map(url -> UploadImageResult.builder()
-                                                                .url(url)
-                                                                .expireAt(Instant.now().plus(30, ChronoUnit.MINUTES))
-                                                                .method("PUT")
-                                                                .contentType(MediaType.IMAGE_JPEG.toString())
-                                                                .build())
-                                                .toList())
-                                .build();
+                return new CreateProductItemResult(
+                                ProductItemResult.fromProductItem(productItem),
+                                urls.stream()
+                                                .map(url -> new PresignUrlInfoResponse(url,
+                                                                Instant.now().plus(30, ChronoUnit.MINUTES), "PUT",
+                                                                MediaType.IMAGE_JPEG.toString()))
+                                                .toList());
 
         }
 
@@ -93,7 +91,7 @@ public class ProductItemUseCase implements ProductItemHandler {
                                                 .product(item.getProduct() != null
                                                                 ? ProductResult.toProductResult(item.getProduct())
                                                                 : null)
-                                                .productItem(ProductItemResult.toProductItemResult(item))
+                                                .productItem(ProductItemResult.fromProjection(item))
                                                 .build())
                                 .toList();
                 return GetProductItemWithProductByIdListResult.builder().productItemWithProducts(result).build();

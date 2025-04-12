@@ -17,7 +17,7 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 @Service
 @RequiredArgsConstructor
 public class ProductItemGrpcClient implements ProductItemClient {
-    @GrpcClient("product")
+    @GrpcClient("products-service")
     private ProductItemServiceBlockingStub productItemServiceBlockingStub;
 
     private final ProductItemGrpcMapper productItemGrpcMapper;

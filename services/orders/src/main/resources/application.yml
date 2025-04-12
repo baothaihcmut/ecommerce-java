@@ -1,11 +1,11 @@
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8082}
 grpc:
   server:
-    port: ${GRPC_PORT:9091}
+    port: ${GRPC_PORT:18082}
   client:
     products-service:
-      address: ${PRODUCTS_SERVICE_URI:static://localhost:9093}
+      address: ${PRODUCTS_SERVICE_URI:static://localhost:18081}
       negotiationType: plaintext
 
 
@@ -30,4 +30,5 @@ spring:
   rabbitmq:
     enabled: "true"
     uri: ${RABBITMQ_URI}
+    
   
