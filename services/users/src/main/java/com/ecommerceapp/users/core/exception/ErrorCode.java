@@ -18,7 +18,8 @@ public enum ErrorCode implements BaseErrorCode {
     EMAIL_EXIST(HttpStatus.CONFLICT, "email exist", new HashMap<>()),
     PHONE_NUMBER_EXIST(HttpStatus.CONFLICT, "phone number exist", new HashMap<>()),
     USER_PENDING_VERFICATION_SIGN_UP(HttpStatus.CONFLICT, "user is pending for verification", new HashMap<>()),
-    WRONG_VERIFICATION_CODE(HttpStatus.UNAUTHORIZED, "wrong verification code", new HashMap<>());
+    WRONG_VERIFICATION_CODE(HttpStatus.UNAUTHORIZED, "wrong verification code", new HashMap<>()),
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "address not found", new HashMap<>());
 
     private HttpStatus status;
     private String message;

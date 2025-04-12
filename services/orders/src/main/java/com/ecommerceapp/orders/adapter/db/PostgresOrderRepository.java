@@ -2,6 +2,8 @@ package com.ecommerceapp.orders.adapter.db;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +52,15 @@ public class PostgresOrderRepository implements OrderRepository {
                         orders.stream().map(Order::getId).toList()));
         entityManager.createQuery(update).executeUpdate();
 
+    }
+
+    @Override
+    public Optional<Order> findOrderById(UUID id) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> q = cb.createQuery(Order.class);
+        Root<Order> root = q.from(Order.class);
+        q.where(cb.equal(root.get("id"), id));
+        return entityManager.createQuery(q).getResultList().stream().findFirst();
     }
 
 }

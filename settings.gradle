@@ -6,6 +6,7 @@ include ':services:products'
 include ':services:shops'
 include ':services:orders'
 include ':services:payment'
+include 'services:shipment'
 include 'gateway'
 
 

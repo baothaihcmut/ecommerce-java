@@ -6,19 +6,20 @@ import java.util.List;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.enums.OrderStatus;
 import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
+import com.ecommerceapp.orders.core.domain.enums.ShipProvider;
 
 public record OrderResult(
         String id,
         String userId,
         OrderStatus status,
         PaymentMethod paymentMethod,
-        String recieveAddressId,
+        String recieveAddress,
         Instant createdAt,
         Instant confirmedAt,
         Instant shippedAt,
         Instant recievedAt,
         int totalAmount,
-        String shippingProviderId,
+        ShipProvider shippingProvider,
         int shippingCost,
         int quantity,
         List<OrderLineResult> orderLines) {
@@ -29,13 +30,13 @@ public record OrderResult(
                 order.getUserId(),
                 order.getStatus(),
                 order.getPaymentMethod(),
-                order.getRecieveAddressId(),
+                order.getRecieveAddress(),
                 order.getCreatedAt(),
                 order.getConfirmedAt(),
                 order.getShippedAt(),
                 order.getRecievedAt(),
                 order.getTotalAmount(),
-                order.getShippingProviderId(),
+                order.getShipProvider(),
                 order.getShippingCost(),
                 order.getQuantity(),
                 order.getOrderLines().stream()

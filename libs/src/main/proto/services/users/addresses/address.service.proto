@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package users;
+import "services/users/addresses/request/get_address_by_id.request.proto";
+import "services/users/addresses/response/get_address_by_id.response.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.users";
+
+
+service AddressService {
+    rpc GetAddressById(GetAddressByIdRequest) returns (GetAddressByIdResponse);
+}

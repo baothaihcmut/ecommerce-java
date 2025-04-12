@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import com.ecommerceapp.libs.events.orders.BulkOrderCanceledEvent;
+import com.ecommerceapp.libs.events.orders.OrderCanceledEvent;
 import com.ecommerceapp.libs.events.orders.OrderCreatedEvent;
 import com.ecommerceapp.products.core.port.inbound.commands.DecreaseProductItemStockCommand;
 import com.ecommerceapp.products.core.port.inbound.commands.IncreaseProductItemStockCommand;
@@ -31,11 +32,20 @@ public class RabbitMqStockHandler {
     }
 
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-increase", durable = "true"), exchange = @Exchange(value = "orders.events", ignoreDeclarationExceptions = "true"), key = "orders.bulk-canceled"))
-    public void handleOrderCanceled(BulkOrderCanceledEvent event) {
+    public void handleBulkOrderCanceled(BulkOrderCanceledEvent event) {
         List<ProductItemStockInfo> stockInfoList = event.orders().stream()
                 .flatMap(order -> order.orderLines().stream())
                 .map(line -> new ProductItemStockInfo(line.productItemId(), line.quantity()))
                 .toList();
         productItemStockHandler.increaseProductItemStock(new IncreaseProductItemStockCommand(stockInfoList));
     }
+
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "products.stock-increase", durable = "true"), exchange = @Exchange(value = "orders.events", ignoreDeclarationExceptions = "true"), key = "orders.bulk-canceled"))
+    public void handleOrderCanceled(OrderCanceledEvent event) {
+        List<ProductItemStockInfo> stockInfoList = event.order().orderLines().stream()
+                .map(line -> new ProductItemStockInfo(line.productItemId(), line.quantity()))
+                .toList();
+        productItemStockHandler.increaseProductItemStock(new IncreaseProductItemStockCommand(stockInfoList));
+    }
+
 }

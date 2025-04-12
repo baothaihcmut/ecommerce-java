@@ -8,6 +8,8 @@ import java.util.UUID;
 import com.ecommerceapp.libs.exception.AppException;
 import com.ecommerceapp.orders.core.domain.enums.OrderStatus;
 import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
+import com.ecommerceapp.orders.core.domain.enums.PaymentProvider;
+import com.ecommerceapp.orders.core.domain.enums.ShipProvider;
 import com.ecommerceapp.orders.core.exception.ErrorCode;
 
 import jakarta.persistence.CascadeType;
@@ -42,22 +44,37 @@ public class Order {
     @Column()
     private PaymentMethod paymentMethod;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column()
-    private String recieveAddressId;
+    private PaymentProvider paymentProvider;
+
+    @Column()
+    private String recieveAddress;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Column()
+    private Instant paidAt;
+
+    @Column()
     private Instant confirmedAt;
+
+    @Column()
     private Instant shippedAt;
+
+    @Column()
     private Instant recievedAt;
+
+    @Column()
     private Instant canceledAt;
 
     @Column(nullable = false)
     private int totalAmount;
 
     @Column()
-    private String shippingProviderId;
+    @Enumerated(EnumType.ORDINAL)
+    private ShipProvider shipProvider;
 
     @Column()
     private int shippingCost;
@@ -109,6 +126,39 @@ public class Order {
         }
     }
 
+    public void processPayment(PaymentMethod paymentMethod, PaymentProvider paymentProvider) {
+        if (!this.status.equals(OrderStatus.PENDING)) {
+            throw new AppException(ErrorCode.ORDER_IS_NOT_PENDING);
+        }
+        this.status = OrderStatus.PROCESSPAYMENT;
+        this.paymentMethod = paymentMethod;
+        if (!paymentMethod.equals(PaymentMethod.COD)) {
+            if (paymentProvider == null) {
+                throw new AppException(ErrorCode.PAYMENT_PROVIDER_IS_REQUIRED);
+            }
+            this.paymentProvider = paymentProvider;
+        }
+    }
+
+    public void updateRecieveAddress(Address address, Integer shippingFee, ShipProvider shipProvider) {
+        this.recieveAddress = address.toString();
+        this.shippingCost = shippingFee;
+        this.shipProvider = shipProvider;
+    }
+
+    public void paymentSuccess() {
+        if (!this.status.equals(OrderStatus.PROCESSPAYMENT)) {
+            throw new AppException(ErrorCode.ORDER_IS_NOT_PROCESS_PAYMENT);
+        }
+        this.status = OrderStatus.PAID;
+        this.paidAt = Instant.now();
+
+    }
+
+    public Integer getTotalAmountWithShippingFee() {
+        return this.totalAmount + this.shippingCost;
+    }
+
     public void confirmOrder(
             String userId,
             PaymentMethod paymentMethod,
@@ -123,7 +173,7 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.shippingCost = shippingCost;
         this.confirmedAt = Instant.now();
-        this.recieveAddressId = recievedAddressId;
+        this.recieveAddress = recievedAddressId;
     }
 
     public void shippedOrder() {

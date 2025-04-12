@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
     private final PaymentHandler paymentHandler;
 
-    @GetMapping("/payment-result")
+    @GetMapping("/vnpay/payment-result")
     public void handlePaymentResult(
             @RequestParam("vnp_TransactionStatus") String paymentStatus,
             @RequestParam("vnp_TxnRef") String paymentId,

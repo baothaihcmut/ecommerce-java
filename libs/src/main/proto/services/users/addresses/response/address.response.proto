@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package users;
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.users";
+
+
+message AddressResponse {
+  string id = 1;               
+  int32 priority = 2;
+  string street = 3;
+  string town = 4;
+  string city = 5;
+  string province = 6;
+  string user_id = 7;           
+}
