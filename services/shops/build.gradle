@@ -9,5 +9,16 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
 
+}
+jar {
+    archivesBaseName = 'shops-service'
+    version = '1.0.0'
+}
+test {
+    useJUnitPlatform()
+}
 
+
+tasks.named('bootJar') {
+    mainClass = 'com.ecommerceapp.shops.ShopsApplication'
 }
