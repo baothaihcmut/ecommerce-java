@@ -27,5 +27,5 @@ test {
 
 
 tasks.named('bootJar') {
-    mainClass = 'com.ecommerceapp.users.OrdersApplication'
+    mainClass = 'com.ecommerceapp.orders.OrdersApplication'
 }

@@ -11,6 +11,7 @@ public record ProductItemResult(
                 String productId,
                 int quantity,
                 int price,
+                Integer weight,
                 List<String> images,
                 List<VariationValueResult> variationValues,
                 Instant createdAt,
@@ -22,6 +23,7 @@ public record ProductItemResult(
                                 productItem.getProductId().toHexString(),
                                 productItem.getQuantity(),
                                 productItem.getPrice(),
+                                productItem.getWeight(),
                                 productItem.getImages(),
                                 productItem.getVariationValues().stream()
                                                 .map(val -> new VariationValueResult(val.getVariationId().toHexString(),
@@ -37,6 +39,7 @@ public record ProductItemResult(
                                 projection.getProductId().toHexString(),
                                 projection.getQuantity(),
                                 projection.getPrice(),
+                                projection.getWeight(),
                                 projection.getImages(),
                                 projection.getVariationValues().stream()
                                                 .map(v -> new VariationValueResult(v.getVariationId().toHexString(),

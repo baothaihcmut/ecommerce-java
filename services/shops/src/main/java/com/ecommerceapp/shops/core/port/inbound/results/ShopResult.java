@@ -4,46 +4,36 @@ import java.time.Instant;
 
 import com.ecommerceapp.shops.core.domain.entities.Shop;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class ShopResult {
-    private String id;
-
-    private String ownerId;
-
-    private String name;
-
-    private String description;
-
-    private Integer numOfProducts;
-
-    private Integer numOfFollowers;
-
-    private Float ratingAvg;
-
-    private Instant createdAt;
-
-    private Instant updatedAt;
-
+public record ShopResult(
+        String id,
+        String ownerId,
+        String name,
+        String description,
+        Integer numOfProducts,
+        Integer numOfFollowers,
+        Float ratingAvg,
+        String shopAddress,
+        String shopStreet,
+        String shopWard,
+        String shopDistrict,
+        String shopProvince,
+        Instant createdAt,
+        Instant updatedAt) {
     public static ShopResult toShopResult(Shop shop) {
-        return ShopResult.builder()
-                .id(shop.getId().toHexString())
-                .name(shop.getName())
-                .description(shop.getDescription())
-                .ownerId(shop.getOwnerId())
-                .numOfFollowers(shop.getNumOfFollower())
-                .numOfProducts(shop.getNumOfProducts())
-                .ratingAvg(shop.getRatingAvg())
-                .createdAt(shop.getCreatedAt())
-                .updatedAt(shop.getUpdatedAt())
-                .build();
+        return new ShopResult(
+                shop.getId().toHexString(),
+                shop.getOwnerId(),
+                shop.getName(),
+                shop.getDescription(),
+                shop.getNumOfProducts(),
+                shop.getNumOfFollower(),
+                shop.getRatingAvg(),
+                shop.getShopAddress(),
+                shop.getShopStreet(),
+                shop.getShopWard(),
+                shop.getShopDistrict(),
+                shop.getShopProvince(),
+                shop.getCreatedAt(),
+                shop.getUpdatedAt());
     }
-
 }

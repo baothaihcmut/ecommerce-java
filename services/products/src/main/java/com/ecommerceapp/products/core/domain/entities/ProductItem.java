@@ -30,6 +30,8 @@ public class ProductItem {
 
     private int price;
 
+    private Integer weight;
+
     private List<String> images;
 
     private List<VariationValue> variationValues;
@@ -42,12 +44,14 @@ public class ProductItem {
             ObjectId productId,
             Integer quantity,
             Integer price,
+            Integer weight,
             Integer numOfImage,
             List<VariationValue> values) {
         this.id = new ObjectId();
         this.productId = productId;
         this.quantity = quantity < 0 ? 0 : quantity;
         this.price = price < 0 ? 0 : price;
+        this.weight = weight < 0 ? 0 : weight;
         this.images = IntStream.range(0, numOfImage)
                 .mapToObj(i -> UUID.randomUUID().toString()).toList();
         this.variationValues = values;

@@ -16,7 +16,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -97,27 +96,6 @@ public class User {
                 .loyaltyPoint(0)
                 .user(this)
                 .build();
-    }
-
-    @Data
-    @AllArgsConstructor
-    @Builder
-    public static class AddAddressArg {
-        private String street;
-        private String town;
-        private String city;
-        private String province;
-    }
-
-    public void addAddress(AddAddressArg arg) {
-        this.addresses.add(
-                Address.builder()
-                        .user(this)
-                        .street(arg.getStreet())
-                        .town(arg.getTown())
-                        .city(arg.getCity())
-                        .province(arg.getProvince())
-                        .build());
     }
 
     public boolean validatePassword(String password) {

@@ -28,6 +28,16 @@ public class Shop {
 
     private Float ratingAvg;
 
+    private String shopAddress;
+
+    private String shopStreet;
+
+    private String shopWard;
+
+    private String shopDistrict;
+
+    private String shopProvince;
+
     private Instant createdAt;
 
     private Instant updatedAt;
@@ -35,7 +45,12 @@ public class Shop {
     public Shop(
             String ownerId,
             String name,
-            String description) {
+            String description,
+            String shopAddress,
+            String shopStreet,
+            String shopWard,
+            String shopDistrict,
+            String shopProvince) {
         this.id = new ObjectId();
         this.ownerId = ownerId;
         this.name = name;
@@ -43,6 +58,11 @@ public class Shop {
         this.numOfFollower = 0;
         this.numOfProducts = 0;
         this.ratingAvg = 0F;
+        this.shopAddress = shopAddress;
+        this.shopStreet = shopStreet;
+        this.shopWard = shopWard;
+        this.shopDistrict = shopDistrict;
+        this.shopProvince = shopProvince;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }

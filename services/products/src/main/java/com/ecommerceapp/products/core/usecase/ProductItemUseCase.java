@@ -63,6 +63,7 @@ public class ProductItemUseCase implements ProductItemHandler {
                                 productId,
                                 command.quantity(),
                                 command.price(),
+                                command.weight(),
                                 command.numOfImages(),
                                 values);
                 // save to db

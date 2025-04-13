@@ -21,6 +21,8 @@ public class ProductItemProjection {
 
     private int price;
 
+    private Integer weight;
+
     private List<String> images;
 
     @Data

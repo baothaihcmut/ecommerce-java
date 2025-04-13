@@ -27,13 +27,16 @@ public class Address {
     private UUID id;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private String street;
 
     @Column(nullable = false)
-    private String town;
+    private String ward;
 
     @Column(nullable = false)
-    private String city;
+    private String district;
 
     @Column(nullable = false)
     private String province;
@@ -45,15 +48,17 @@ public class Address {
     private User user;
 
     public Address(
+            String address,
             String street,
-            String town,
-            String city,
+            String ward,
+            String district,
             String province,
             User user) {
         this.id = UUID.randomUUID();
+        this.address = address;
         this.street = street;
-        this.town = town;
-        this.city = city;
+        this.ward = ward;
+        this.district = district;
         this.province = province;
         this.user = user;
     }

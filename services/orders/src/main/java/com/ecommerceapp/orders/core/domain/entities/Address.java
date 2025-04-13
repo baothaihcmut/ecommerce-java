@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 public class Address {
     private String id;
     private String userId;
+    private String address;
     private String street;
-    private String town;
-    private String city;
+    private String ward;
+    private String district;
     private String province;
 
     @Override
     public String toString() {
-        return String.format("%s, %s, %s, %s", street, town, city, province);
+        return String.format("%s, %s, %s, %s, %s", address, street, ward, district, province);
     }
 }

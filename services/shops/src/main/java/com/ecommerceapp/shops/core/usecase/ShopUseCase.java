@@ -39,8 +39,13 @@ public class ShopUseCase implements ShopHandler {
                 // create shop
                 Shop shop = new Shop(
                                 userContext.userId(),
-                                command.getName(),
-                                command.getDescription());
+                                command.name(),
+                                command.description(),
+                                command.shopAddress(),
+                                command.shopStreet(),
+                                command.shopWard(),
+                                command.shopDistrict(),
+                                command.shopProvince());
                 shopRepository.save(shop);
                 return CreateShopResult.builder()
                                 .shop(ShopResult.toShopResult(shop))

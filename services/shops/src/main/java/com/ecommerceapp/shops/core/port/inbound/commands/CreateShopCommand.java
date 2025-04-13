@@ -1,13 +1,11 @@
 package com.ecommerceapp.shops.core.port.inbound.commands;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CreateShopCommand {
-    private String name;
-    private String description;
+public record CreateShopCommand(
+        String name,
+        String description,
+        String shopAddress,
+        String shopStreet,
+        String shopWard,
+        String shopDistrict,
+        String shopProvince) {
 }

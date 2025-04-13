@@ -5,17 +5,19 @@ import com.ecommerceapp.users.core.domain.entities.Address;
 public record AddressResult(
         String id,
         String userId,
+        String address,
         String street,
-        String town,
-        String city,
+        String ward,
+        String district,
         String province) {
     public static AddressResult fromAddressDomain(Address address) {
         return new AddressResult(
                 address.getId().toString(),
                 address.getUser().getId().toString(),
+                address.getAddress(),
                 address.getStreet(),
-                address.getTown(),
-                address.getCity(),
+                address.getWard(),
+                address.getDistrict(),
                 address.getProvince());
     }
 }

@@ -13,12 +13,13 @@ message ProductItemResponse {
     string product_id = 2;
     int32 quantity = 3;
     int32 price = 4;
-    repeated string images = 5;
+    int32 weight = 5;
+    repeated string images = 6;
     message VariationValue {
         string variation_id = 1;
         string value = 2;
     }
-    repeated VariationValue variation_values = 6;
-    google.protobuf.Timestamp created_at = 7;
-    google.protobuf.Timestamp updated_at = 8;
+    repeated VariationValue variation_values = 7;
+    google.protobuf.Timestamp created_at = 8;
+    google.protobuf.Timestamp updated_at = 9;
 }

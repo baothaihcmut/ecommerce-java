@@ -43,9 +43,10 @@ public class UserAddressUseCase implements UserAddressHandler {
         User user = userRepository.findUserById(UUID.fromString(userContext.userId()))
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         Address address = new Address(
+                command.address(),
                 command.street(),
-                command.town(),
-                command.city(),
+                command.ward(),
+                command.district(),
                 command.province(),
                 user);
         addressRepository.save(address);
