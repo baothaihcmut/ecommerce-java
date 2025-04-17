@@ -30,12 +30,60 @@ public class GatewayRoutes {
                                         .setName("authCircuitBreaker")
                                         .setFallbackUri("forward:/fallback/auth")))
                         .uri(properties.getRoutes().getAuthService()))
+                .route("users", r -> r
+                        .path(properties.getPrefix() + "/users/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/users")))
+                        .uri(properties.getRoutes().getUsersService()))
                 .route("shops", r -> r
                         .path(properties.getPrefix() + "/shops/**")
                         .filters(f -> f
                                 .stripPrefix(2)
-                                .filter(authFilter()))
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/shops")))
                         .uri(properties.getRoutes().getShopsService()))
+                .route("products", r -> r
+                        .path(properties.getPrefix() + "/products/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/products")))
+                        .uri(properties.getRoutes().getProductsService()))
+                .route("orders", r -> r
+                        .path(properties.getPrefix() + "/orders/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/orders")))
+                        .uri(properties.getRoutes().getOrdersService()))
+                .route("shipment", r -> r
+                        .path(properties.getPrefix() + "/shipment/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/shipment")))
+                        .uri(properties.getRoutes().getShipmentService()))
+                .route("payment", r -> r
+                        .path(properties.getPrefix() + "/payment/**")
+                        .filters(f -> f
+                                .stripPrefix(2)
+                                .filter(authFilter())
+                                .circuitBreaker(c -> c
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/payment")))
+                        .uri(properties.getRoutes().getPaymentService()))
                 .route("shops-api-docs", r -> r
                         .path(properties.getPrefix() + "/shops-service/api-docs")
                         .filters(f -> f
@@ -45,6 +93,11 @@ public class GatewayRoutes {
                         .path(properties.getPrefix() + "/users-service/api-docs")
                         .filters(f -> f.stripPrefix(3))
                         .uri(properties.getRoutes().getUsersService()))
+                .route("orders-api-docs", r -> r
+                        .path(properties.getPrefix() + "/orders-service/api-docs")
+                        .filters(f -> f
+                                .stripPrefix(3))
+                        .uri(properties.getRoutes().getOrdersService()))
                 .build();
     }
 

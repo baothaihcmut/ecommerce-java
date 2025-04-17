@@ -11,3 +11,11 @@ dependencies {
 
 
 }
+jar {
+    archivesBaseName = 'products-service'
+    version = '1.0.0'
+}
+
+tasks.named('bootJar') {
+    mainClass = 'com.ecommerceapp.products.ProductsApplication'
+}

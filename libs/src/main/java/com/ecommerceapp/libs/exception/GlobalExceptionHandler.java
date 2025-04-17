@@ -63,7 +63,6 @@ public class GlobalExceptionHandler {
     // Method Not Allowed
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ErrorResponse> handleRuntimeException(Exception exception) {
-        System.out.println("Errorrrr");
         exception.printStackTrace(); // Log the exception properly
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.initResponse(false, "Internal error", null));

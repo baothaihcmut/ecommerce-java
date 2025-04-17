@@ -1,0 +1,6 @@
+controller:
+  serviceAccount:
+    create: false
+    name: jenkins-admin
+    storageClass: standard-rwo
+    

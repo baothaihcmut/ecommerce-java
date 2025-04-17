@@ -1,20 +1,26 @@
 image:
   repository: baothaihcmut/ecommerce-users-service
-  tag: v1.0.4
+  tag: v1.0.5
   pullPolicy: Always
 configMap:
   name: main
   data:
     SERVER_PORT: "8080"
-    RABBITMQ_URI: "amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh"
+    GRPC_PORT: "18080"
+    DB_URL: jdbc:postgresql://ep-icy-recipe-a169l80u-pooler.ap-southeast-1.aws.neon.tech/ecommerce-userdb?sslmode=require
+    DB_USER: neondb_owner
     REDIS_HOST: "ecommerce-redis-master.ecommerce-app.svc.cluster.local"
     REDIS_PORT: "6379"
-    REDIS_PASSWORD: "redispassword"
     REDIS_USERNAME: "default"
+
+
+
 
 config:
   from: "env"
   envConfigMap:
+    - "main"
+  envSecret:
     - "main"
 service:
   name: "users-service"
@@ -24,6 +30,10 @@ service:
       protocol: "TCP"
       port: 80
       targetPort: 8080
+    - name: "grpc"
+      protocol: "TCP"
+      port: 10080
+      targetPort: 10080
 resources:
   requests:
     cpu: "0.3"

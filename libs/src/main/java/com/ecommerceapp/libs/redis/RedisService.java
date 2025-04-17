@@ -38,4 +38,8 @@ public class RedisService {
     public void removeByKey(String key) throws Exception {
         redisTemplate.delete(key);
     }
+
+    public boolean existByKey(String key) throws Exception {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
 }

@@ -54,8 +54,8 @@ public class ShopUseCase implements ShopHandler {
 
         @Override
         public GetShopByIdResult getShopById(GetShopByIdQuery query) {
-                System.out.println(query.getShopId());
-                Shop shop = shopRepository.findShopById(new ObjectId(query.getShopId()))
+                System.out.println(query.id());
+                Shop shop = shopRepository.findShopById(new ObjectId(query.id()))
                                 .orElseThrow(() -> new AppException(ErrorCode.SHOP_NOT_EXIST));
                 return GetShopByIdResult.builder()
                                 .shop(ShopResult.toShopResult(shop))

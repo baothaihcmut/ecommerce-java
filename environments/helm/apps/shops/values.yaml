@@ -1,0 +1,61 @@
+image:
+  repository: baothaihcmut/ecommerce-shops-service
+  tag: v1.0.5
+  pullPolicy: Always
+configMap:
+  name: main
+  data:
+    SERVER_PORT: "8080"
+    GRPC_PORT: "18080"
+    DB_URL: jdbc:postgresql://ep-icy-recipe-a169l80u-pooler.ap-southeast-1.aws.neon.tech/ecommerce-userdb?sslmode=require
+    DB_USER: neondb_owner
+    REDIS_HOST: "ecommerce-redis-master.ecommerce-app.svc.cluster.local"
+    REDIS_PORT: "6379"
+    REDIS_USERNAME: "default"
+secret:
+  name: main
+  data:
+
+
+config:
+  from: "env"
+  envConfigMap:
+    - "main"
+service:
+  name: "shops-service"
+  type: ClusterIP
+  ports:
+    - name: "http"
+      protocol: "TCP"
+      port: 80
+      targetPort: 8080
+resources:
+  requests:
+    cpu: "0.3"
+    memory: "200Mi"
+  limits:
+    cpu: "0.6"
+    memory: "400Mi"
+serviceAccount:
+  enabled: true
+  name: wait-dependency
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list", "watch"]
+
+initContainers: []
+  # - name: wait-for-dependencies
+  #   image: bitnami/kubectl:latest
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - |
+  #       echo "Waiting for Redis and Kafka to be ready..."
+  #       kubectl wait --for=condition=Ready pod -l app=ecommerce-app-dependency --timeout=300s
+
+
+
+
+
+

@@ -23,6 +23,10 @@ public class GatewayProperties {
         private String authService;
         private String usersService;
         private String shopsService;
+        private String productsService;
+        private String ordersService;
+        private String shipmentService;
+        private String paymentService;
     }
 
     private final Routes routes;

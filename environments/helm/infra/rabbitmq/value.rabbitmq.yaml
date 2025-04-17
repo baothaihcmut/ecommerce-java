@@ -2,6 +2,8 @@ auth:
   username: "rabbimq_user"
   password: "rabbimq_password"
 extraConfiguration: |-
+  default_user = ecommerce-user
+  default_pass = ecommerce-password
   default_vhost = ecommerce-vhost
   default_permissions.configure = .*
   default_permissions.read = .*

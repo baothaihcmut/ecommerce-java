@@ -17,6 +17,7 @@ import com.ecommerceapp.libs.mappers.CommonMapper;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.entities.OrderLine;
 import com.ecommerceapp.orders.core.domain.events.OrderCancelEvent;
+import com.ecommerceapp.orders.core.domain.events.OrderConfirmedEvent;
 
 @Mapper(componentModel = "spring", uses = {
                 CommonMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE, collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
@@ -36,6 +37,8 @@ public interface OrderEventMapper {
         OrderPaidEvent toOrderPaidEvent(com.ecommerceapp.orders.core.domain.events.OrderPaidEvent orderPaidEvent);
 
         OrderCanceledEvent toOrderCanceledEvent(OrderCancelEvent event);
+
+        com.ecommerceapp.libs.events.orders.OrderConfirmedEvent toOrderConfirmedEvent(OrderConfirmedEvent event);
 
         BulkOrderCanceledEvent toBulkOrderCanceledEvent(
                         com.ecommerceapp.orders.core.domain.events.BulkOrderCanceledEvent domain);

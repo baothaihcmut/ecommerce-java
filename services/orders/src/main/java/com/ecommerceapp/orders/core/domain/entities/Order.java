@@ -40,6 +40,9 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status;
 
+    @Column(nullable = false)
+    private String shopId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private PaymentMethod paymentMethod;
@@ -102,6 +105,7 @@ public class Order {
         if (!checkOrderInSameShop(createOrderLineArgs)) {
             throw new AppException(ErrorCode.ORDER_LINE_IS_IN_DIFFERENT_SHOP);
         }
+        this.shopId = createOrderLineArgs.get(0).productItem.getShopId();
         this.checkProductItemOutofStock(createOrderLineArgs);
         this.orderLines = createOrderLineArgs.stream()
                 .map((arg) -> new OrderLine(this, arg.productItem(), arg.quantity())).toList();
@@ -163,21 +167,13 @@ public class Order {
         return this.totalAmount + this.shippingCost;
     }
 
-    public void confirmOrder(
-            String userId,
-            PaymentMethod paymentMethod,
-            String recievedAddressId,
-            Integer shippingCost) {
-        if (!userId.equals(this.userId)) {
-            throw new AppException(ErrorCode.ORDER_IS_NOT_BELONG_TO_USER);
+    public void confirmOrder() {
+        if (!this.status.equals(OrderStatus.PAID)) {
+            throw new AppException(ErrorCode.ORDER_IS_NOT_PAID);
         }
-        if (!this.status.equals(OrderStatus.PENDING)) {
-            throw new AppException(ErrorCode.ORDER_IS_NOT_PENDING);
-        }
-        this.paymentMethod = paymentMethod;
-        this.shippingCost = shippingCost;
         this.confirmedAt = Instant.now();
-        this.recieveAddress = recievedAddressId;
+        this.status = OrderStatus.CONFIRMED;
+
     }
 
     public void shippedOrder() {

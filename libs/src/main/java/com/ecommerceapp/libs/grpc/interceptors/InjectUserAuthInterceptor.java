@@ -21,8 +21,7 @@ public class InjectUserAuthInterceptor implements ClientInterceptor {
             @Override
             public void start(Listener<RespT> responseListener, Metadata headers) {
                 UserContext userContext = SecurityUtil.getUserContext();
-                System.out.println("hellooooo");
-                System.out.println(userContext.userId());
+
                 if (userContext != null) {
                     headers.put(Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER), userContext.userId());
                     headers.put(Metadata.Key.of("is-shop-owner-active", Metadata.ASCII_STRING_MARSHALLER),

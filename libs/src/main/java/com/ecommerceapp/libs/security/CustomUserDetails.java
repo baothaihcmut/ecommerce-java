@@ -15,11 +15,13 @@ import lombok.NoArgsConstructor;
 public class CustomUserDetails implements UserDetails {
     private String userId;
     private Boolean isShopOwnerActive;
+    private String token;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(String userId, Boolean isShopOwnerActive) {
+    public CustomUserDetails(String userId, Boolean isShopOwnerActive, String token) {
         this.userId = userId;
         this.isShopOwnerActive = isShopOwnerActive;
+        this.token = token;
     }
 
     @Override

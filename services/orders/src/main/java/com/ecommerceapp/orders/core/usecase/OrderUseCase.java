@@ -16,27 +16,36 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerceapp.libs.exception.AppException;
+import com.ecommerceapp.libs.models.SessionOrderStatusInfo;
+import com.ecommerceapp.libs.redis.RedisService;
 import com.ecommerceapp.libs.security.SecurityUtil;
 import com.ecommerceapp.libs.security.SecurityUtil.UserContext;
 import com.ecommerceapp.orders.core.domain.entities.Address;
 import com.ecommerceapp.orders.core.domain.entities.Order;
 import com.ecommerceapp.orders.core.domain.entities.ProductItem;
+import com.ecommerceapp.orders.core.domain.entities.Shop;
 import com.ecommerceapp.orders.core.domain.entities.Order.CreateOrderLineArg;
 import com.ecommerceapp.orders.core.domain.enums.PaymentMethod;
 import com.ecommerceapp.orders.core.domain.events.BulkOrderCanceledEvent;
+import com.ecommerceapp.orders.core.domain.events.OrderConfirmedEvent;
 import com.ecommerceapp.orders.core.domain.events.OrderCreatedEvent;
 import com.ecommerceapp.orders.core.exception.ErrorCode;
+import com.ecommerceapp.orders.core.port.inbound.commands.ConfirmOrderCommand;
 import com.ecommerceapp.orders.core.port.inbound.commands.CreateOrderCommand;
 import com.ecommerceapp.orders.core.port.inbound.commands.MakeOrderPaymentCommand;
 import com.ecommerceapp.orders.core.port.inbound.commands.UpdateOrderAddressCommand;
 import com.ecommerceapp.orders.core.port.inbound.handlers.OrderHandler;
+import com.ecommerceapp.orders.core.port.inbound.queries.GetOrderStatusQuery;
+import com.ecommerceapp.orders.core.port.inbound.results.ConfirmOrderResult;
 import com.ecommerceapp.orders.core.port.inbound.results.CreateOrderResult;
+import com.ecommerceapp.orders.core.port.inbound.results.GetOrderStatusResult;
 import com.ecommerceapp.orders.core.port.inbound.results.MakeOrderPaymentResult;
 import com.ecommerceapp.orders.core.port.inbound.results.OrderResult;
 import com.ecommerceapp.orders.core.port.inbound.results.UpdateOrderAddressResult;
 import com.ecommerceapp.orders.core.port.outbound.clients.PaymentClient;
 import com.ecommerceapp.orders.core.port.outbound.clients.ProductItemClient;
 import com.ecommerceapp.orders.core.port.outbound.clients.ShipmentClient;
+import com.ecommerceapp.orders.core.port.outbound.clients.ShopClient;
 import com.ecommerceapp.orders.core.port.outbound.clients.ShipmentClient.GetShippingFeeArg;
 import com.ecommerceapp.orders.core.port.outbound.clients.UserAddressClient;
 import com.ecommerceapp.orders.core.port.outbound.clients.PaymentClient.MakePaymentArg;
@@ -54,6 +63,9 @@ public class OrderUseCase implements OrderHandler {
     private final UserAddressClient userAddressClient;
     private final ShipmentClient shipmentClient;
     private final PaymentClient paymentClient;
+    private final ShopClient shopClient;
+    private final RedisService redisService;
+    public static final String orderStatusSessionKey = "session:orders:status";
 
     @Override
     @Transactional
@@ -82,7 +94,7 @@ public class OrderUseCase implements OrderHandler {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void cancelOrderOverdue() {
         List<Order> orders = orderRepository
                 .findOrderWithOrderLinesByCreatedAtBeforeTime(Instant.now().minus(30, ChronoUnit.MINUTES));
@@ -179,6 +191,46 @@ public class OrderUseCase implements OrderHandler {
             throw new RuntimeException(exception.getMessage(), exception.getCause());
         }
 
+    }
+
+    @Override
+    @Transactional
+    public ConfirmOrderResult confirmOrder(ConfirmOrderCommand command) {
+        UserContext userContext = SecurityUtil.getUserContext();
+        Order order = orderRepository.findOrderById(UUID.fromString(command.id()))
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXIT));
+        Shop shop = shopClient.findShopById(order.getShopId());
+        if (!shop.getOwnerId().equals(userContext.userId())) {
+            throw new AppException(ErrorCode.USER_IS_NOT_SHOP_OWNER_OF_ORDER);
+        }
+        order.confirmOrder();
+        orderRepository.save(order);
+        orderEventPublisher.publishOrderConfirmedEvent(new OrderConfirmedEvent(order));
+        return new ConfirmOrderResult(OrderResult.toOrderResult(order));
+    }
+
+    @Override
+    public GetOrderStatusResult getOrderStatus(GetOrderStatusQuery query) {
+        SessionOrderStatusInfo sessionOrderStatusInfo;
+        try {
+            sessionOrderStatusInfo = redisService.getValueObject(
+                    String.format("%s:%s", orderStatusSessionKey, query.sessionId()), SessionOrderStatusInfo.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        if (sessionOrderStatusInfo == null) {
+            throw new AppException(ErrorCode.ORDER_STATUS_SESSION_NOT_FOUND_OR_EXPIRE);
+        }
+
+        Order order = orderRepository.findOrderById(UUID.fromString(sessionOrderStatusInfo.orderId()))
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXIT));
+        if (!order.getUserId().equals(sessionOrderStatusInfo.userId())) {
+            Shop shop = shopClient.findShopById(order.getShopId());
+            if (!shop.getOwnerId().equals(sessionOrderStatusInfo.userId())) {
+                throw new AppException(ErrorCode.USER_PERMISSION_DENIED);
+            }
+        }
+        return new GetOrderStatusResult(OrderResult.toOrderResult(order));
     }
 
 }

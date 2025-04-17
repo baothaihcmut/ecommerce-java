@@ -13,6 +13,9 @@ grpc:
     users-service:
       address: ${USERS_SERVICE_URI:static://localhost:18085}
       negotiationType: plaintext
+    shops-service:
+      address: ${SHOPS_SERVICE_URI:static://localhost:18086}
+      negotiationType: plaintext
 
 
 
@@ -34,8 +37,28 @@ spring:
     hibernate:
       ddl-auto: update  
     show-sql: true
+  data:
+    redis:
+      enabled: "true"
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      username: ${REDIS_USERNAME:default} 
+      database: 0
+      connection-pool-size: ${REDIS_CONNECTION_POOL_SIZE:5}
+      connection-minimun-idle-size: ${REDIS_CONNECTION_MINIMUM_IDLE_SIZE:2}
+      idle-connection-timeout: 10000
   rabbitmq:
     enabled: "true"
     uri: ${RABBITMQ_URI}
+springdoc:
+  info:
+    title: "Orders service"
+    description: "Orders service"
+    version: "v1.0.0"
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
     
   

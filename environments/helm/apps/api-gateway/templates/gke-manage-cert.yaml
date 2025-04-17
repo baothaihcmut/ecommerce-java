@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: ecommerce-managed-cert
+spec:
+  domains:
+    - ecommerce-app.spsohcmut.xyz

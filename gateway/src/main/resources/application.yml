@@ -14,21 +14,28 @@ spring:
       open-apis:
         - "/auth/log-in" 
         - "/auth/sign-up"
+        - "/auth/confirm"
       routes:
         auth-service: ${AUTH_SERVICE_URI:http://localhost:8083}
-        users-service: ${USER_SERVICE_URI:http://localhost:8083}
-        shops-service: ${SHOP_SERVICE_URI:http://localhost:8082}
+        users-service: ${USERS_SERVICE_URI:http://localhost:8083}
+        shops-service: ${SHOPS_SERVICE_URI:http://localhost:8082}
+        orders-service: ${ORDERS_SERVICE_URI:http://localhost:8084}
+        products-service: ${PRODUCTS_SERVICE_URI:http://localhost:8085}
+        shipment-service: ${SHIPMENT_SERVICE_URI:http://localhost:8086}
+        payment-service: ${PAYMENT_SERVICE_URI:http://localhost:8087}
 
 springdoc:
   api-docs:
-    path: "${server.servlet.context-path}/api-docs"  # Dynamically use context-path
+    path: "${server.servlet.context-path}/api-docs" 
   swagger-ui:
-    path: "${server.servlet.context-path}/swagger-ui.html"  # Dynamically use context-path
+    path: "${server.servlet.context-path}/swagger-ui.html"  
     urls:
       - name: "Shops service"
-        url: "${server.servlet.context-path}/shops-service/api-docs"  # Use context-path for API docs
+        url: "${server.servlet.context-path}/shops-service/api-docs"  
       - name: "Users service"
-        url: "${server.servlet.context-path}/users-service/api-docs"  # Use context-path for API docs
+        url: "${server.servlet.context-path}/users-service/api-docs"  
+      - name: "Orders service"
+        url: "${server.servlet.context-path}/orders-service/api-docs" 
 
 jwt:
   secret: "your_accesstoken_key111111111111111111111"

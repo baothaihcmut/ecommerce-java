@@ -1,12 +1,12 @@
 image:
   repository: baothaihcmut/ecommerce-mail-service
-  tag: v1.0.1
+  tag: v1.0.5
   pullPolicy: Always
 configMap:
   name: main
   data:
     SERVER_PORT: "8080"
-    RABBITMQ_URI: "amqps://nvfpayhh:X7H1EaS5XkBgNAxG9oa2FhrsDT6SVkho@possum.lmq.cloudamqp.com/nvfpayhh"
+    RABBITMQ_URI: "amqp://rabbimq_user:rabbimq_password@ecommerce-rabbitmq.ecommerce-app.svc.cluster.local/ecommerce-vhost"
 
 config:
   from: "env"

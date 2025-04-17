@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package shops;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ecommerceapp.generated.shops";
+
+message ShopResponse {
+  string id = 1;
+  string owner_id = 2;
+  string name = 3;
+  string description = 4;
+  int32 num_of_products = 5;
+  int32 num_of_follower = 6;
+  float rating_avg = 7;
+  string shop_address = 8;
+  string shop_street = 9;
+  string shop_ward = 10;
+  string shop_district = 11;
+  string shop_province = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+}

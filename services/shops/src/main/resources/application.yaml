@@ -1,8 +1,8 @@
 server:
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:8086}
 grpc:
   server:
-    port: ${GRPC_PORT:9094}  
+    port: ${GRPC_PORT:18086}
     reflection-service-enabled: true  
     security:
       enabled: false
@@ -28,6 +28,7 @@ spring:
     import: optional:file:.env[.properties]
   data:
     mongodb:
+      enabled: "true"
       uri: ${MONGO_URI:mongo://localhost:27017}
       database: "shopdb"
       connection-pool:

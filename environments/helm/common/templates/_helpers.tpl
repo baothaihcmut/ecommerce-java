@@ -15,7 +15,7 @@ envFrom:
   {{- end }}
   {{- range .Values.config.envSecret }}
   - secretRef:
-      name: {{ . }}
+      name: {{ $.Release.Name }}-{{ $.Chart.Name }}-{{ . }}-secret
   {{- end }}
 {{- end }}
 {{- end }}

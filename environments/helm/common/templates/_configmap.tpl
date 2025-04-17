@@ -6,5 +6,5 @@ metadata:
   labels:
     {{- include "common.labels" . | nindent 4 }}
 data:
-    {{- toYaml .Values.configMap.data | nindent 4 }}
+  {{- toYaml .Values.configMap.data | nindent 2 }}
 {{- end }}
